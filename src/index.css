@@ -1,94 +1,105 @@
-@import "tailwindcss";
+/* src/index.css */
+@import "tailwindcss"; /* Ključno za Tailwind v4! */
 
+/* Google Fonts uvoz: Elegantni serif i moderni geometrijski sans-serif */
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ==========================================================================
+   TAILWIND v4 CONFIGURATION (DIZAJNERSKI TOKENI)
+   ========================================================================== */
 @theme {
-  /* Meraky paleta boja dostupna kroz klase (npr. bg-meraky-bg, text-meraky-gold...) */
-  --color-meraky-bg: #FAF7F2;
-  --color-meraky-sand: #F3ECE3;
-  --color-meraky-taupe: #3E3530;
-  --color-meraky-gold: #C5A880;
-  --color-meraky-gold-light: #E5DEC9;
-  
-  /* Kratki nazivi za brže pisanje */
-  --color-beige-light: #FAF7F2;
-  --color-beige-dark: #3E3530;
-  --color-accent-gold: #C5A880;
+  /* Registracija fontova u Tailwind sustav -> stvara 'font-serif-elegant' i 'font-sans-clean' */
+  --font-serif-elegant: 'Cormorant Garamond', serif;
+  --font-sans-clean: 'Plus Jakarta Sans', sans-serif;
 
-  /* Elegantni fontovi */
-  --font-serif-elegant: 'Cormorant Garamond', Georgia, serif;
-  --font-sans-clean: 'Montserrat', sans-serif;
-}
+  /* Službena paleta boja brenda za lakše održavanje i konzistentnost */
+  --color-brand-cream: #FCFAF7;       /* Primarna luksuzna svijetla pozadina */
+  --color-brand-espresso: #2B231F;    /* Glavna tamna boja za tekst, gumbe i kontraste */
+  --color-brand-gold: #B89565;        /* Premium zlatni detalji i akcenti */
+  --color-brand-sand: #E8E2D7;        /* Profinjene tanke linije i rubovi */
+  --color-brand-clay: #FAF7F2;        /* Topla podpozadina za kalendar/kartice */
+  --color-brand-moss: #E5DEC9;        /* Nježna boja za selekciju teksta */
 
-@layer base {
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  body {
-    font-family: var(--font-sans-clean);
-    background-color: var(--color-meraky-bg);
-    color: var(--color-meraky-taupe);
-    overflow-x: hidden;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  /* Glatke i prirodne animacije */
+  --animate-fade-in: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
-/* Elegantni serif za naslove i citate */
-.font-serif-elegant {
-  font-family: var(--font-serif-elegant);
+/* ==========================================================================
+   GLOBALNI BAZNI STILOVI (GLOBAL RESET & DEFAULTS)
+   ========================================================================== */
+html {
+  scroll-behavior: smooth; /* Omogućuje luksuzni, spori scroll do sekcija umjesto naglog skoka */
 }
 
-/* Custom klasa za visoki razmak među slovima (all-caps estetika) */
-.letter-spacing-widest {
-  letter-spacing: 0.25em;
+/* Globalno usklađena selekcija teksta na cijeloj stranici */
+::selection {
+  background-color: var(--color-brand-moss);
+  color: var(--color-brand-espresso);
 }
 
-/* Organska sjena lišća u pozadini koja daje prirodni SPA osjećaj */
-.organic-leaf-shadow {
-  position: relative;
+body {
+  font-family: var(--font-sans-clean);
+  background-color: var(--color-brand-cream);
+  color: var(--color-brand-espresso);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-.organic-leaf-shadow::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-  opacity: 0.12;
-  background-image: 
-    radial-gradient(circle at 15% 15%, rgba(62, 53, 48, 0.18) 0%, transparent 50%),
-    radial-gradient(circle at 85% 80%, rgba(62, 53, 48, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 10%, rgba(197, 168, 128, 0.08) 0%, transparent 35%);
-  mix-blend-mode: multiply;
-  z-index: 0;
+/* ==========================================================================
+   FORM CONTROLS (Usklađivanje inputa za rezervacijski sustav)
+   ========================================================================== */
+input, select, textarea {
+  transition: all 0.25s ease-in-out !important;
 }
 
-/* Profinjeni, minimalistički scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+/* Premium fokus efekt na svim poljima za unos */
+input:focus, select:focus, textarea:focus {
+  outline: none !important;
+  border-color: var(--color-brand-gold) !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 101, 0.15) !important;
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-meraky-bg);
+/* Sprječavanje iOS automatskog zumiranja na mobilnim uređajima */
+@media screen and (max-width: 768px) {
+  input, select, textarea {
+    font-size: 16px !important;
+  }
 }
 
-::-webkit-scrollbar-thumb {
-  background: var(--color-meraky-gold-light);
-  border-radius: 10px;
-  transition: background 0.3s ease;
-}
+/* ==========================================================================
+   CUSTOM UTILITY CLASSES (Korisne klase)
+   ========================================================================== */
 
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-meraky-gold);
-}
-
-/* Pomoćna klasa za sakrivanje scrollbara na Instagram Highlights filtrima */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
+/* Sakrivanje scrollbara na horizontalnim elementima (npr. tabovi usluga na mobitelu) */
+@utility scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Glatki zamašnjak za skrolanje prstom na mobitelu */
+@utility touch-scroll {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Suptilna, luksuzna tekstura organskih čestica u pozadini */
+@utility organic-leaf-shadow {
+  background-image: 
+    radial-gradient(circle at 50% 50%, rgba(184, 149, 101, 0.07) 1px, transparent 1px),
+    radial-gradient(circle at 0 0, rgba(184, 149, 101, 0.04) 1px, transparent 1px);
+  background-size: 32px 32px;
 }

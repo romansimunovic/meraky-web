@@ -1,25 +1,22 @@
+
 import React, { useState, useEffect } from 'react';
 
 export default function BookingSystem({ servicesData = [] }) {
-  const [step, setStep] = useState(1); // 1: Usluga, 2: Termin, 3: Kontakt, 4: Uspjeh
-  
-  // State za odabrane podatke
+  const [step, setStep] = useState(1); 
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [clientData, setClientData] = useState({ name: "", phone: "", email: "", note: "" });
 
-  // Izvlačimo sve pojedinačne usluge iz kategorija za brzi odabir
   const allServices = servicesData.flatMap(cat => 
     cat.items.map(item => ({
       name: item.name,
       category: cat.category,
       price: item.price,
-      duration: "30-45 min" // Simulirano trajanje tretmana
+      duration: item.duration || "45 min"
     }))
   );
 
-  // Dinamički generiramo sljedećih 5 radnih dana (preskačemo nedjelju)
   const getNextWorkingDays = () => {
     const days = [];
     const options = { weekday: 'short', day: 'numeric', month: 'numeric' };
@@ -27,7 +24,7 @@ export default function BookingSystem({ servicesData = [] }) {
 
     while (days.length < 5) {
       current.setDate(current.getDate() + 1);
-      if (current.getDay() !== 0) { // Ako nije nedjelja
+      if (current.getDay() !== 0) { 
         days.push({
           rawDate: current.toISOString().split('T')[0],
           formatted: current.toLocaleDateString('hr-HR', options),
@@ -40,13 +37,11 @@ export default function BookingSystem({ servicesData = [] }) {
 
   const availableDays = getNextWorkingDays();
 
-  // Simulacija slobodnih termina ovisno o danu (u stvarnosti dolazi s backenda)
   const mockTimeSlots = {
     morning: ["08:30", "09:15", "10:00", "11:30"],
     afternoon: ["13:00", "14:15", "15:30", "17:00", "18:15", "19:00"]
   };
 
-  // Automatski resetiraj vrijeme ako se promijeni datum
   useEffect(() => {
     setSelectedTime("");
   }, [selectedDate]);
@@ -63,7 +58,7 @@ export default function BookingSystem({ servicesData = [] }) {
 
   const handleSubmitBooking = (e) => {
     e.preventDefault();
-    setStep(4); // Prikaz uspješne rezervacije
+    setStep(4); 
   };
 
   const formatSelectedDate = (rawDate) => {
@@ -73,75 +68,73 @@ export default function BookingSystem({ servicesData = [] }) {
   };
 
   return (
-    <section id="rezervacija" className="max-w-5xl mx-auto px-6 py-12 relative z-10">
-      <div className="bg-[#F3ECE3]/60 rounded-3xl p-6 md:p-12 border border-[#E8E2D7] grid lg:grid-cols-12 gap-8 lg:gap-12 items-start relative overflow-hidden">
+    <section id="rezervacija" className="max-w-5xl mx-auto px-4 sm:px-6 py-12 relative z-10 overflow-hidden">
+      <div className="bg-[#F3ECE3]/60 rounded-3xl p-5 sm:p-8 md:p-12 border border-[#E8E2D7] grid lg:grid-cols-12 gap-8 lg:gap-12 items-start relative">
         <div className="absolute inset-0 organic-leaf-shadow pointer-events-none opacity-20"></div>
-        
-        
 
-        {/* DESNA STRANA: Produkcijski Booking Widget */}
+        {/* DESNA STRANA (Booking Widget) */}
         <div className="lg:col-span-8 w-full relative z-10">
-          <div className="bg-white rounded-2xl border border-[#E8E2D7] shadow-xs overflow-hidden transition-all duration-300">
+          <div className="bg-white rounded-2xl border border-[#E8E2D7] shadow-sm overflow-hidden transition-all duration-300">
             
-            {/* PROGRESS BAR (Koraci) - sakriva se u uspješnom koraku */}
+            {/* KORACI - PROGRESS BAR */}
             {step < 4 && (
-              <div className="bg-[#FAF7F2] border-b border-[#E8E2D7] px-6 py-4 flex justify-between items-center text-[10px] uppercase tracking-wider font-bold text-[#3E3530]/40">
+              <div className="bg-[#FCFAF7] border-b border-[#E8E2D7] px-4 sm:px-6 py-4 flex justify-between items-center text-[10px] sm:text-xs uppercase tracking-wider font-bold text-[#2B231F]/40">
                 <button 
                   onClick={() => setStep(1)} 
-                  className={`flex items-center gap-2 transition-colors cursor-pointer ${step >= 1 ? 'text-[#C5A880]' : ''}`}
+                  className={`flex items-center gap-1.5 transition-colors cursor-pointer ${step >= 1 ? 'text-[#B89565]' : ''}`}
                 >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] border ${step >= 1 ? 'border-[#C5A880] bg-[#F3ECE3]' : 'border-neutral-200'}`}>1</span>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] border ${step >= 1 ? 'border-[#B89565] bg-[#F3ECE3]' : 'border-neutral-200'}`}>1</span>
                   Usluga
                 </button>
-                <div className="h-px bg-[#E8E2D7] grow mx-4"></div>
+                <div className="h-px bg-[#E8E2D7] grow mx-2 sm:mx-4"></div>
                 <button 
                   onClick={() => selectedService && setStep(2)} 
                   disabled={!selectedService}
-                  className={`flex items-center gap-2 transition-colors ${step >= 2 ? 'text-[#C5A880]' : ''} disabled:opacity-50`}
+                  className={`flex items-center gap-1.5 transition-colors ${step >= 2 ? 'text-[#B89565]' : ''} disabled:opacity-50`}
                 >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] border ${step >= 2 ? 'border-[#C5A880] bg-[#F3ECE3]' : 'border-neutral-200'}`}>2</span>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] border ${step >= 2 ? 'border-[#B89565] bg-[#F3ECE3]' : 'border-neutral-200'}`}>2</span>
                   Vrijeme
                 </button>
-                <div className="h-px bg-[#E8E2D7] grow mx-4"></div>
+                <div className="h-px bg-[#E8E2D7] grow mx-2 sm:mx-4"></div>
                 <button 
                   onClick={() => selectedTime && setStep(3)}
                   disabled={!selectedTime}
-                  className={`flex items-center gap-2 transition-colors ${step >= 3 ? 'text-[#C5A880]' : ''} disabled:opacity-50`}
+                  className={`flex items-center gap-1.5 transition-colors ${step >= 3 ? 'text-[#B89565]' : ''} disabled:opacity-50`}
                 >
-                  <span className={`w-5 h-5 rounded-full flex items-center justify-center text-[9px] border ${step >= 3 ? 'border-[#C5A880] bg-[#F3ECE3]' : 'border-neutral-200'}`}>3</span>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] border ${step >= 3 ? 'border-[#B89565] bg-[#F3ECE3]' : 'border-neutral-200'}`}>3</span>
                   Podaci
                 </button>
               </div>
             )}
 
-            <div className="p-6 sm:p-8">
+            <div className="p-5 sm:p-8">
               
               {/* KORAK 1: Odabir Usluge */}
               {step === 1 && (
                 <div className="animate-fade-in space-y-4">
-                  <div className="text-center md:text-left mb-6">
-                    <h4 className="font-serif-elegant text-xl font-medium text-[#3E3530]">Odaberi tretman</h4>
-                    <p className="text-[10px] text-[#3E3530]/50 uppercase tracking-wider mt-1">Izaberi željenu uslugu za koju želiš rezervirati termin</p>
+                  <div className="text-left mb-6">
+                    <h4 className="font-serif-elegant text-2xl font-medium text-[#2B231F]">Odaberi tretman</h4>
+                    <p className="text-xs text-[#2B231F]/60 mt-1">Izaberi željenu uslugu iz našeg ritualnog cjenika</p>
                   </div>
                   
-                  <div className="max-h-[380px] overflow-y-auto pr-1 space-y-2 scrollbar-none">
+                  <div className="max-h-[360px] overflow-y-auto pr-1 space-y-3 scrollbar-none">
                     {allServices.map((svc, i) => (
                       <button
                         key={i}
                         onClick={() => handleServiceSelect(svc)}
                         className={`w-full p-4 rounded-xl border text-left flex justify-between items-center transition-all cursor-pointer group ${
                           selectedService?.name === svc.name
-                            ? 'border-[#C5A880] bg-[#FAF7F2]'
-                            : 'border-[#E8E2D7] bg-white hover:border-[#C5A880]/50 hover:bg-[#FAF7F2]/30'
+                            ? 'border-[#B89565] bg-[#FCFAF7]'
+                            : 'border-[#E8E2D7] bg-white hover:border-[#B89565]/60 hover:bg-[#FCFAF7]'
                         }`}
                       >
-                        <div>
-                          <p className="text-xs font-bold text-[#3E3530] group-hover:text-[#C5A880] transition-colors">{svc.name}</p>
-                          <p className="text-[10px] text-[#3E3530]/50 uppercase tracking-wider mt-1">{svc.category} • {svc.duration}</p>
+                        <div className="space-y-1">
+                          <p className="text-sm sm:text-base font-bold text-[#2B231F] group-hover:text-[#B89565] transition-colors">{svc.name}</p>
+                          <p className="text-[10px] sm:text-xs text-[#2B231F]/60 uppercase tracking-wider font-semibold">{svc.category} • {svc.duration}</p>
                         </div>
-                        <div className="text-right">
-                          <p className="text-xs font-semibold font-mono text-[#C5A880]">{svc.price} €</p>
-                          <span className="text-[9px] text-[#C5A880] font-bold uppercase tracking-wider mt-0.5 block opacity-0 group-hover:opacity-100 transition-opacity">Odaberi →</span>
+                        <div className="text-right flex-shrink-0">
+                          <p className="text-sm sm:text-base font-bold font-mono text-[#B89565]">{svc.price} €</p>
+                          <span className="text-[10px] text-[#B89565] font-bold uppercase tracking-wider mt-1 block opacity-0 group-hover:opacity-100 transition-opacity">Odaberi →</span>
                         </div>
                       </button>
                     ))}
@@ -149,60 +142,61 @@ export default function BookingSystem({ servicesData = [] }) {
                 </div>
               )}
 
-              {/* KORAK 2: Slobodni datumi i vremena */}
+              {/* KORAK 2: Odabir Datuma i Vremena (Fiksirana mobilna responzivnost) */}
               {step === 2 && (
                 <div className="animate-fade-in space-y-6">
-                  <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4">
+                  <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4 gap-4">
                     <div>
-                      <h4 className="font-serif-elegant text-xl font-medium text-[#3E3530]">Odaberi termin</h4>
-                      <p className="text-[10px] text-[#3E3530]/50 uppercase tracking-wider mt-1">Usluga: <span className="font-bold text-[#C5A880]">{selectedService?.name}</span></p>
+                      <h4 className="font-serif-elegant text-2xl font-medium text-[#2B231F]">Odaberi termin</h4>
+                      <p className="text-xs text-[#2B231F]/60 mt-1">Usluga: <span className="font-bold text-[#B89565]">{selectedService?.name}</span></p>
                     </div>
                     <button 
                       onClick={() => setStep(1)}
-                      className="text-[10px] font-bold text-[#3E3530]/40 uppercase tracking-wider hover:text-[#3E3530] transition-colors"
+                      className="text-[11px] font-bold text-[#2B231F]/60 uppercase tracking-wider hover:text-[#2B231F] transition-colors flex-shrink-0"
                     >
                       ← Promijeni
                     </button>
                   </div>
 
-                  {/* Vodoravni odabir dana */}
+                  {/* Kalendarski dani bez lomljenja u novi red */}
                   <div>
-                    <label className="block text-[9px] uppercase tracking-wider mb-2 font-bold text-[#3E3530]/50">Dostupni datumi</label>
-                    <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-none">
-                      {availableDays.map((day, idx) => (
-                        <button
-                          key={idx}
-                          type="button"
-                          onClick={() => setSelectedDate(day.rawDate)}
-                          className={`flex flex-col items-center justify-center min-w-[75px] py-2.5 rounded-lg border text-center transition-all cursor-pointer ${
-                            selectedDate === day.rawDate
-                              ? 'border-[#C5A880] bg-[#C5A880] text-white shadow-xs scale-102'
-                              : 'border-[#E8E2D7] bg-white text-[#3E3530] hover:border-[#C5A880]/50'
-                          }`}
-                        >
-                          <span className="text-[8px] uppercase tracking-wider opacity-70 font-semibold">{day.formatted.split(',')[0]}</span>
-                          <span className="text-xs font-bold font-mono mt-0.5">{day.formatted.split(',')[1]}</span>
-                        </button>
-                      ))}
+                    <label className="block text-[10px] uppercase tracking-wider mb-3 font-bold text-[#2B231F]/60">Dostupni datumi</label>
+                    <div className="w-full overflow-x-auto pb-2 scrollbar-none touch-scroll">
+                      <div className="flex gap-2 min-w-max px-1">
+                        {availableDays.map((day, idx) => (
+                          <button
+                            key={idx}
+                            type="button"
+                            onClick={() => setSelectedDate(day.rawDate)}
+                            className={`flex flex-col items-center justify-center py-3 px-4 rounded-xl border text-center transition-all cursor-pointer min-w-[72px] ${
+                              selectedDate === day.rawDate
+                                ? 'border-[#B89565] bg-[#B89565] text-white shadow-sm'
+                                : 'border-[#E8E2D7] bg-white text-[#2B231F] hover:border-[#B89565]/60'
+                            }`}
+                          >
+                            <span className="text-[10px] uppercase tracking-wider opacity-85 font-semibold">{day.formatted.split(',')[0]}</span>
+                            <span className="text-sm font-bold font-mono mt-1">{day.formatted.split(',')[1]}</span>
+                          </button>
+                        ))}
+                      </div>
                     </div>
                   </div>
 
-                  {/* Prikaz slobodnih sati nakon odabira datuma */}
+                  {/* Vremenski slotovi */}
                   {selectedDate ? (
-                    <div className="space-y-4 animate-fade-in">
-                      {/* prijepodne */}
+                    <div className="space-y-5 animate-fade-in">
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider mb-2 font-bold text-[#3E3530]/50">Jutarnji termini</label>
+                        <label className="block text-[10px] uppercase tracking-wider mb-2.5 font-bold text-[#2B231F]/60">Prijepodne</label>
                         <div className="grid grid-cols-4 gap-2">
                           {mockTimeSlots.morning.map((time, idx) => (
                             <button
                               key={idx}
                               type="button"
                               onClick={() => handleTimeSelect(time)}
-                              className={`py-2 text-xs font-semibold rounded-lg border font-mono transition-all cursor-pointer text-center ${
+                              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border font-mono transition-all cursor-pointer text-center ${
                                 selectedTime === time
-                                  ? 'border-[#3E3530] bg-[#3E3530] text-white'
-                                  : 'border-[#E8E2D7] bg-[#FAF7F2]/40 text-[#3E3530]/80 hover:border-[#C5A880]'
+                                  ? 'border-[#2B231F] bg-[#2B231F] text-white'
+                                  : 'border-[#E8E2D7] bg-[#FAF7F2]/60 text-[#2B231F]/90 hover:border-[#B89565]'
                               }`}
                             >
                               {time}
@@ -211,19 +205,18 @@ export default function BookingSystem({ servicesData = [] }) {
                         </div>
                       </div>
 
-                      {/* poslijepodne */}
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider mb-2 font-bold text-[#3E3530]/50">Poslijepodnevni termini</label>
+                        <label className="block text-[10px] uppercase tracking-wider mb-2.5 font-bold text-[#2B231F]/60">Poslijepodne</label>
                         <div className="grid grid-cols-4 gap-2">
                           {mockTimeSlots.afternoon.map((time, idx) => (
                             <button
                               key={idx}
                               type="button"
                               onClick={() => handleTimeSelect(time)}
-                              className={`py-2 text-xs font-semibold rounded-lg border font-mono transition-all cursor-pointer text-center ${
+                              className={`py-2.5 text-xs sm:text-sm font-bold rounded-xl border font-mono transition-all cursor-pointer text-center ${
                                 selectedTime === time
-                                  ? 'border-[#3E3530] bg-[#3E3530] text-white'
-                                  : 'border-[#E8E2D7] bg-[#FAF7F2]/40 text-[#3E3530]/80 hover:border-[#C5A880]'
+                                  ? 'border-[#2B231F] bg-[#2B231F] text-white'
+                                  : 'border-[#E8E2D7] bg-[#FAF7F2]/60 text-[#2B231F]/90 hover:border-[#B89565]'
                               }`}
                             >
                               {time}
@@ -233,26 +226,26 @@ export default function BookingSystem({ servicesData = [] }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-8 bg-[#FAF7F2]/40 rounded-xl border border-dashed border-[#E8E2D7]">
-                      <p className="text-xs text-[#3E3530]/50">Molimo odaberite datum kako biste vidjeli slobodna vremena.</p>
+                    <div className="text-center py-10 bg-[#FCFAF7] rounded-xl border border-dashed border-[#E8E2D7]">
+                      <p className="text-sm text-[#2B231F]/60">Molimo odaberite datum za prikaz slobodnih termina.</p>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* KORAK 3: Podaci za kontakt */}
+              {/* KORAK 3: Forma za kontakt s iOS zoom fixom */}
               {step === 3 && (
                 <div className="animate-fade-in space-y-6">
-                  <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4">
+                  <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4 gap-4">
                     <div>
-                      <h4 className="font-serif-elegant text-xl font-medium text-[#3E3530]">Kontakt podaci</h4>
-                      <p className="text-[10px] text-[#3E3530]/50 uppercase tracking-wider mt-1">
-                        Termin: <span className="font-bold text-[#C5A880]">{formatSelectedDate(selectedDate)} u {selectedTime}h</span>
+                      <h4 className="font-serif-elegant text-2xl font-medium text-[#2B231F]">Kontakt podaci</h4>
+                      <p className="text-xs text-[#2B231F]/70 mt-1">
+                        Termin: <span className="font-bold text-[#B89565]">{formatSelectedDate(selectedDate)} u {selectedTime}h</span>
                       </p>
                     </div>
                     <button 
                       onClick={() => setStep(2)}
-                      className="text-[10px] font-bold text-[#3E3530]/40 uppercase tracking-wider hover:text-[#3E3530] transition-colors"
+                      className="text-[11px] font-bold text-[#2B231F]/60 uppercase tracking-wider hover:text-[#2B231F] transition-colors flex-shrink-0"
                     >
                       ← Natrag
                     </button>
@@ -261,19 +254,19 @@ export default function BookingSystem({ servicesData = [] }) {
                   <form onSubmit={handleSubmitBooking} className="space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider mb-1.5 font-semibold text-[#3E3530]/50">Ime i Prezime</label>
+                        <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Ime i Prezime</label>
                         <input 
                           type="text" required placeholder="Marija Horvat"
-                          className="w-full text-xs p-3 rounded-lg border border-[#E8E2D7] bg-[#FAF7F2]/50 focus:outline-hidden focus:ring-1 focus:ring-[#C5A880] text-[#3E3530] transition-all"
+                          className="w-full text-base p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
                           value={clientData.name}
                           onChange={(e) => setClientData({...clientData, name: e.target.value})}
                         />
                       </div>
                       <div>
-                        <label className="block text-[9px] uppercase tracking-wider mb-1.5 font-semibold text-[#3E3530]/50">Broj mobitela</label>
+                        <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Broj mobitela</label>
                         <input 
                           type="tel" required placeholder="099 123 4567"
-                          className="w-full text-xs p-3 rounded-lg border border-[#E8E2D7] bg-[#FAF7F2]/50 focus:outline-hidden focus:ring-1 focus:ring-[#C5A880] text-[#3E3530] transition-all"
+                          className="w-full text-base p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
                           value={clientData.phone}
                           onChange={(e) => setClientData({...clientData, phone: e.target.value})}
                         />
@@ -281,82 +274,81 @@ export default function BookingSystem({ servicesData = [] }) {
                     </div>
 
                     <div>
-                      <label className="block text-[9px] uppercase tracking-wider mb-1.5 font-semibold text-[#3E3530]/50">E-mail adresa (za potvrdu)</label>
+                      <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">E-mail adresa (za potvrdu)</label>
                       <input 
                         type="email" required placeholder="marija@gmail.com"
-                        className="w-full text-xs p-3 rounded-lg border border-[#E8E2D7] bg-[#FAF7F2]/50 focus:outline-hidden focus:ring-1 focus:ring-[#C5A880] text-[#3E3530] transition-all"
+                        className="w-full text-base p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
                         value={clientData.email}
                         onChange={(e) => setClientData({...clientData, email: e.target.value})}
                       />
                     </div>
 
                     <div>
-                      <label className="block text-[9px] uppercase tracking-wider mb-1.5 font-semibold text-[#3E3530]/50">Napomena za salon (opcionalno)</label>
+                      <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Napomena za salon (opcionalno)</label>
                       <textarea 
-                        rows="2" placeholder="Imate li posebne napomene ili zahtjeve..."
-                        className="w-full text-xs p-3 rounded-lg border border-[#E8E2D7] bg-[#FAF7F2]/50 focus:outline-hidden focus:ring-1 focus:ring-[#C5A880] text-[#3E3530] transition-all"
+                        rows="2" placeholder="Posebne napomene..."
+                        className="w-full text-base p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
                         value={clientData.note}
                         onChange={(e) => setClientData({...clientData, note: e.target.value})}
                       ></textarea>
                     </div>
 
-                    <button type="submit" className="w-full mt-2 py-3.5 bg-[#3E3530] hover:bg-[#C5A880] text-white text-xs font-bold rounded-lg uppercase tracking-widest transition-all cursor-pointer shadow-xs active:scale-98">
+                    <button type="submit" className="w-full mt-4 py-4 bg-[#2B231F] hover:bg-[#B89565] text-white text-xs sm:text-sm font-bold rounded-xl uppercase tracking-widest transition-all cursor-pointer shadow-md active:scale-[0.98]">
                       Potvrdi i rezerviraj termin
                     </button>
                   </form>
                 </div>
               )}
 
-              {/* KORAK 4: Potvrda / Uspjeh (Prekrasna salonska kartica) */}
+              {/* KORAK 4: Potvrda uspjeha */}
               {step === 4 && (
                 <div className="animate-fade-in text-center py-6 space-y-6">
-                  <div className="w-12 h-12 bg-emerald-50 border border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
+                  <div className="w-14 h-14 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-6 h-6">
                       <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
                     </svg>
                   </div>
                   
-                  <div>
-                    <h4 className="font-serif-elegant text-2xl font-light text-[#3E3530]">Vidimo se uskoro!</h4>
-                    <p className="text-xs text-neutral-500 mt-2">Termin je uspješno zabilježen u našem rasporedu.</p>
+                  <div className="space-y-2">
+                    <h4 className="font-serif-elegant text-3xl font-light text-[#2B231F]">Vidimo se uskoro!</h4>
+                    <p className="text-sm text-neutral-500">Termin je uspješno zabilježen u našem kalendaru.</p>
                   </div>
 
-                  {/* Sažetak rezervacije u obliku elegantne kartice */}
-                  <div className="max-w-md mx-auto bg-[#FAF7F2] border border-[#E5DEC9] rounded-2xl p-5 text-left space-y-4 shadow-xs relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#E5DEC9]/10 rounded-full -translate-y-6 translate-x-6"></div>
+                  <div className="max-w-md mx-auto bg-[#FCFAF7] border-2 border-[#E5DEC9] rounded-2xl p-6 text-left space-y-4 shadow-sm relative overflow-hidden">
+                    <div className="absolute top-0 right-0 w-24 h-24 bg-[#E5DEC9]/15 rounded-full -translate-y-6 translate-x-6"></div>
                     
                     <div className="border-b border-[#E5DEC9]/50 pb-3">
-                      <p className="text-[9px] text-[#C5A880] uppercase tracking-widest font-bold">Potvrda Termina</p>
-                      <h5 className="font-serif-elegant text-base text-[#3E3530] mt-0.5">{selectedService?.name}</h5>
+                      <p className="text-[10px] text-[#B89565] uppercase tracking-widest font-bold">Potvrda Termina</p>
+                      <h5 className="font-serif-elegant text-lg text-[#2B231F] mt-0.5">{selectedService?.name}</h5>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 text-xs font-sans text-[#3E3530]">
-                      <div>
-                        <p className="text-[8px] uppercase tracking-wider text-[#3E3530]/50 font-bold mb-0.5">Datum i Vrijeme</p>
+                    <div className="grid grid-cols-2 gap-4 text-xs sm:text-sm text-[#2B231F]">
+                      <div className="space-y-1">
+                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Datum i Vrijeme</p>
                         <p className="font-semibold">{formatSelectedDate(selectedDate)}</p>
-                        <p className="font-mono text-xs text-[#C5A880] mt-0.5">{selectedTime} sati</p>
+                        <p className="font-mono text-sm text-[#B89565] mt-0.5 font-bold">{selectedTime} h</p>
                       </div>
-                      <div>
-                        <p className="text-[8px] uppercase tracking-wider text-[#3E3530]/50 font-bold mb-0.5">Klijent</p>
+                      <div className="space-y-1">
+                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Klijent</p>
                         <p className="font-semibold">{clientData.name}</p>
-                        <p className="text-[10px] text-[#3E3530]/60 mt-0.5">{clientData.phone}</p>
+                        <p className="text-xs text-[#2B231F]/70 mt-0.5">{clientData.phone}</p>
                       </div>
                     </div>
 
-                    <div className="border-t border-[#E5DEC9]/50 pt-3 flex justify-between items-center">
+                    <div className="border-t border-[#E5DEC9]/50 pt-3 flex justify-between items-center gap-4">
                       <div>
-                        <p className="text-[8px] uppercase tracking-wider text-[#3E3530]/50 font-bold">Lokacija salona</p>
-                        <p className="text-[10px] font-semibold text-[#3E3530]">Krbavska ulica 15, Osijek</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Lokacija salona</p>
+                        <p className="text-xs sm:text-sm font-semibold text-[#2B231F]">Krbavska ulica 15, Osijek</p>
                       </div>
                       <div className="text-right">
-                        <p className="text-[8px] uppercase tracking-wider text-[#3E3530]/50 font-bold">Cijena</p>
-                        <p className="text-sm font-bold font-mono text-[#C5A880]">{selectedService?.price} €</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Cijena</p>
+                        <p className="text-base sm:text-lg font-bold font-mono text-[#B89565]">{selectedService?.price} €</p>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-[10px] text-neutral-400 max-w-sm mx-auto leading-relaxed">
-                    Potvrda s detaljima poslana je na adresu <strong className="font-semibold text-neutral-600">{clientData.email}</strong>. Ako trebate otkazati ili promijeniti termin, molimo kontaktirajte nas telefonski najkasnije 24h prije dolaska.
+                  <p className="text-xs text-neutral-500 max-w-sm mx-auto leading-relaxed">
+                    Detalji rezervacije poslani su na <strong className="font-semibold text-neutral-700">{clientData.email}</strong>. Ako trebate promjenu, nazovite nas najkasnije 24 sata ranije.
                   </p>
 
                   <div className="pt-4">
@@ -368,7 +360,7 @@ export default function BookingSystem({ servicesData = [] }) {
                         setSelectedTime("");
                         setClientData({ name: "", phone: "", email: "", note: "" });
                       }}
-                      className="text-[9px] font-bold text-[#C5A880] uppercase tracking-widest hover:text-[#3E3530] transition-colors py-2 px-5 rounded-full border border-[#C5A880]/30 hover:border-[#3E3530]"
+                      className="text-[10px] font-bold text-[#B89565] uppercase tracking-widest hover:text-[#2B231F] transition-colors py-3 px-6 rounded-full border-2 border-[#B89565]/40 hover:border-[#2B231F]"
                     >
                       Rezerviraj novi termin
                     </button>

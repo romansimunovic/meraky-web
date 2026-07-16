@@ -1,11 +1,11 @@
+// vite.config.js
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite' // <-- Dodajemo uvoz
+import tailwindcss from '@tailwindcss/vite' // <-- 1. Uvezi ovaj plugin
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(), // <-- Dodajemo plugin ovdje
+    tailwindcss(), // <-- 2. Pokreni ga ovdje
   ],
 })
