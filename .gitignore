@@ -1,0 +1,26 @@
+# Log datoteke i sistemsko smeće
+node_modules
+.DS_Store
+Thumbs.db
+*.log
+
+# Produkcijski build (Netlify će ga sam generirati)
+dist
+dist-ssr
+*.local
+
+# EKOLOŠKE VARIJABLE (Najvažniji dio!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE / Editori
+.vscode
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?

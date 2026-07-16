@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@theme {
+  /* Meraky paleta boja dostupna kroz klase (npr. bg-meraky-bg, text-meraky-gold...) */
+  --color-meraky-bg: #FAF7F2;
+  --color-meraky-sand: #F3ECE3;
+  --color-meraky-taupe: #3E3530;
+  --color-meraky-gold: #C5A880;
+  --color-meraky-gold-light: #E5DEC9;
+  
+  /* Kratki nazivi za brže pisanje */
+  --color-beige-light: #FAF7F2;
+  --color-beige-dark: #3E3530;
+  --color-accent-gold: #C5A880;
+
+  /* Elegantni fontovi */
+  --font-serif-elegant: 'Cormorant Garamond', Georgia, serif;
+  --font-sans-clean: 'Montserrat', sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: var(--font-sans-clean);
+    background-color: var(--color-meraky-bg);
+    color: var(--color-meraky-taupe);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* Elegantni serif za naslove i citate */
+.font-serif-elegant {
+  font-family: var(--font-serif-elegant);
+}
+
+/* Custom klasa za visoki razmak među slovima (all-caps estetika) */
+.letter-spacing-widest {
+  letter-spacing: 0.25em;
+}
+
+/* Organska sjena lišća u pozadini koja daje prirodni SPA osjećaj */
+.organic-leaf-shadow {
+  position: relative;
+}
+
+.organic-leaf-shadow::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  background-image: 
+    radial-gradient(circle at 15% 15%, rgba(62, 53, 48, 0.18) 0%, transparent 50%),
+    radial-gradient(circle at 85% 80%, rgba(62, 53, 48, 0.12) 0%, transparent 45%),
+    radial-gradient(circle at 50% 10%, rgba(197, 168, 128, 0.08) 0%, transparent 35%);
+  mix-blend-mode: multiply;
+  z-index: 0;
+}
+
+/* Profinjeni, minimalistički scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-meraky-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-meraky-gold-light);
+  border-radius: 10px;
+  transition: background 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-meraky-gold);
+}
+
+/* Pomoćna klasa za sakrivanje scrollbara na Instagram Highlights filtrima */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
