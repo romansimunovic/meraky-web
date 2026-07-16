@@ -5,7 +5,24 @@ export default function BookingSystem({ servicesData = [] }) {
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Podaci o klijentu i validacija
   const [clientData, setClientData] = useState({ name: "", phone: "", email: "", note: "" });
+  const [touched, setTouched] = useState({ name: false, phone: false, email: false });
+
+  // Regex pravila
+  const nameRegex = /^[A-Za-zČĆŽŠĐčćžšđ\s'-]{2,50}$/;
+  const phoneRegex = /^(\+385|0)\d{8,9}$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  // Evaluacija valjanosti polja
+  const isNameValid = nameRegex.test(clientData.name);
+  const isPhoneValid = phoneRegex.test(clientData.phone.replace(/\s+/g, ''));
+  const isEmailValid = emailRegex.test(clientData.email);
+  const isNoteValid = clientData.note.length <= 300;
+
+  const isFormValid = isNameValid && isPhoneValid && isEmailValid && isNoteValid;
 
   const allServices = servicesData.flatMap(cat => 
     cat.items.map(item => ({
@@ -57,7 +74,14 @@ export default function BookingSystem({ servicesData = [] }) {
 
   const handleSubmitBooking = (e) => {
     e.preventDefault();
-    setStep(4); 
+    if (!isFormValid) return;
+
+    setIsSubmitting(true);
+    // Simulacija slanja na backend (1.5 sekundu za premium spinner efekt)
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setStep(4);
+    }, 1500);
   };
 
   const formatSelectedDate = (rawDate) => {
@@ -66,19 +90,78 @@ export default function BookingSystem({ servicesData = [] }) {
     return dateObj.toLocaleDateString('hr-HR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
   };
 
-  return (
-    <section id="rezervacija" className="max-w-5xl mx-auto px-3 sm:px-6 py-8 sm:py-12 relative z-10 overflow-hidden">
-      {/* Smanjen padding na mobitelu (p-3), zaobljenje prilagođeno ekranu (rounded-2xl) */}
-      <div className="bg-[#F3ECE3]/60 rounded-2xl sm:rounded-3xl p-3.5 sm:p-8 md:p-12 border border-[#E8E2D7] grid lg:grid-cols-12 gap-6 lg:gap-12 items-start relative">
-        <div className="absolute inset-0 organic-leaf-shadow pointer-events-none opacity-20"></div>
+  // Generiranje kalendarskih poveznica za Google, Outlook i Apple/iCal (.ics)
+  const getCalendarUrls = () => {
+    if (!selectedDate || !selectedTime || !selectedService) return {};
+    
+    const [year, month, day] = selectedDate.split("-");
+    const [hours, minutes] = selectedTime.split(":");
+    
+    const startDate = new Date(year, month - 1, day, hours, minutes);
+    let durationMin = 45;
+    const durationMatch = selectedService.duration.match(/\d+/);
+    if (durationMatch) {
+      durationMin = parseInt(durationMatch[0], 10);
+    }
+    const endDate = new Date(startDate.getTime() + durationMin * 60 * 1000);
 
-        {/* GLAVNI WIDGET */}
-        <div className="lg:col-span-8 w-full relative z-10">
-          <div className="bg-white rounded-2xl border border-[#E8E2D7] shadow-sm overflow-hidden transition-all duration-300">
+    const formatToIsoNoSymbols = (date) => {
+      return date.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    };
+
+    const startIso = formatToIsoNoSymbols(startDate);
+    const endIso = formatToIsoNoSymbols(endDate);
+
+    const title = encodeURIComponent(`Ritual: ${selectedService.name}`);
+    const details = encodeURIComponent(`Vaš termin u salonu je potvrđen.\nUsluga: ${selectedService.name}\nTrajanje: ${selectedService.duration}\nCijena: ${selectedService.price} €\nKlijent: ${clientData.name}`);
+    const location = encodeURIComponent("Krbavska ulica 15, Osijek");
+
+    const googleUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${startIso}/${endIso}&details=${details}&location=${location}`;
+    const outlookUrl = `https://outlook.live.com/calendar/0/deeplink/compose?path=/calendar/action/compose&rru=addevent&subject=${title}&startdt=${startDate.toISOString()}&enddt=${endDate.toISOString()}&body=${details}&location=${location}`;
+    
+    // iCal (.ics) dinamička datoteka
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      "BEGIN:VEVENT",
+      `SUMMARY:${selectedService.name}`,
+      `DTSTART:${startIso.replace("Z", "")}`,
+      `DTEND:${endIso.replace("Z", "")}`,
+      `DESCRIPTION:${clientData.name} - ${selectedService.name}`,
+      "LOCATION:Krbavska ulica 15\\, Osijek",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\n");
+    const icalUrl = `data:text/calendar;charset=utf-8,${encodeURIComponent(icsContent)}`;
+
+    return { googleUrl, outlookUrl, icalUrl };
+  };
+
+  const { googleUrl, outlookUrl, icalUrl } = getCalendarUrls();
+
+  return (
+    <section id="rezervacija" className="w-full max-w-4xl mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+      {/* Stilovi za glatku tranziciju koraka bez ovisnosti o konfiguraciji Tailwind-a */}
+      <style>{`
+        @keyframes bookingFadeIn {
+          0% { opacity: 0; transform: translateY(8px) scale(0.99); }
+          100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .animate-booking-step {
+          animation: bookingFadeIn 350ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+      `}</style>
+
+      <div className="flex justify-center w-full">
+        <div className="w-full max-w-3xl bg-[#F3ECE3]/60 rounded-2xl sm:rounded-3xl p-4 sm:p-8 md:p-10 border border-[#E8E2D7] relative overflow-hidden">
+          <div className="absolute inset-0 organic-leaf-shadow pointer-events-none opacity-20"></div>
+
+          {/* GLAVNI WIDGET CARD */}
+          <div className="w-full bg-white rounded-2xl border border-[#E8E2D7] shadow-sm overflow-hidden relative">
             
-            {/* KORACI - PROGRESS BAR (Responzivne veličine i manji razmaci) */}
+            {/* KORACI - PROGRESS BAR */}
             {step < 4 && (
-              <div className="bg-[#FCFAF7] border-b border-[#E8E2D7] px-3 sm:px-6 py-4 flex justify-between items-center text-[9px] xs:text-[10px] sm:text-xs uppercase tracking-wider font-bold text-[#2B231F]/40">
+              <div className="bg-[#FCFAF7] border-b border-[#E8E2D7] px-4 sm:px-6 py-4 flex justify-between items-center text-[9px] xs:text-[10px] sm:text-xs uppercase tracking-wider font-bold text-[#2B231F]/40">
                 <button 
                   onClick={() => setStep(1)} 
                   className={`flex items-center gap-1 sm:gap-1.5 transition-colors cursor-pointer ${step >= 1 ? 'text-[#B89565]' : ''}`}
@@ -107,12 +190,20 @@ export default function BookingSystem({ servicesData = [] }) {
               </div>
             )}
 
-            {/* Unutarnji p-4 na mobitelu daje više prostora elementima */}
-            <div className="p-4 sm:p-8">
+            {/* SADRŽAJ KORAKA S ANIMACIJOM */}
+            <div className="p-4 sm:p-8 min-h-[380px] flex flex-col justify-between relative">
               
+              {/* SPINNER PREKO CIJELOG SADRŽAJA DOK SE REZERVIRA */}
+              {isSubmitting && (
+                <div className="absolute inset-0 bg-white/90 z-50 flex flex-col items-center justify-center space-y-4">
+                  <div className="w-12 h-12 border-4 border-[#B89565] border-t-transparent rounded-full animate-spin"></div>
+                  <p className="text-sm font-bold text-[#2B231F] uppercase tracking-wider">Rezerviram vaš termin...</p>
+                </div>
+              )}
+
               {/* KORAK 1: Odabir Usluge */}
               {step === 1 && (
-                <div className="animate-fade-in space-y-4">
+                <div className="animate-booking-step space-y-4 flex-1">
                   <div className="text-left mb-5">
                     <h4 className="font-serif-elegant text-xl sm:text-2xl font-medium text-[#2B231F]">Odaberi tretman</h4>
                     <p className="text-xs text-[#2B231F]/60 mt-1">Izaberi željenu uslugu iz našeg ritualnog cjenika</p>
@@ -145,7 +236,7 @@ export default function BookingSystem({ servicesData = [] }) {
 
               {/* KORAK 2: Odabir Datuma i Vremena */}
               {step === 2 && (
-                <div className="animate-fade-in space-y-6">
+                <div className="animate-booking-step space-y-6 flex-1">
                   <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4 gap-4">
                     <div>
                       <h4 className="font-serif-elegant text-xl sm:text-2xl font-medium text-[#2B231F]">Odaberi termin</h4>
@@ -155,40 +246,38 @@ export default function BookingSystem({ servicesData = [] }) {
                       onClick={() => setStep(1)}
                       className="text-[11px] font-bold text-[#2B231F]/60 uppercase tracking-wider hover:text-[#2B231F] transition-colors flex-shrink-0"
                     >
-                      ← Promijeni
+                      ← Promijeni tretman
                     </button>
                   </div>
 
-                  {/* Kalendarski dani */}
+                  {/* Kalendarski dani - bez horizontalnog scrollera */}
                   <div>
                     <label className="block text-[10px] uppercase tracking-wider mb-3 font-bold text-[#2B231F]/60">Dostupni datumi</label>
-                    <div className="w-full overflow-x-auto pb-2 scrollbar-none touch-scroll">
-                      <div className="flex gap-2 min-w-max px-1">
-                        {availableDays.map((day, idx) => (
-                          <button
-                            key={idx}
-                            type="button"
-                            onClick={() => setSelectedDate(day.rawDate)}
-                            className={`flex flex-col items-center justify-center py-2.5 px-3 sm:py-3 sm:px-4 rounded-xl border text-center transition-all cursor-pointer min-w-[68px] sm:min-w-[72px] ${
-                              selectedDate === day.rawDate
-                                ? 'border-[#B89565] bg-[#B89565] text-white shadow-sm'
-                                : 'border-[#E8E2D7] bg-white text-[#2B231F] hover:border-[#B89565]/60'
-                            }`}
-                          >
-                            <span className="text-[9px] sm:text-[10px] uppercase tracking-wider opacity-85 font-semibold">{day.formatted.split(',')[0]}</span>
-                            <span className="text-xs sm:text-sm font-bold font-mono mt-0.5 sm:mt-1">{day.formatted.split(',')[1]}</span>
-                          </button>
-                        ))}
-                      </div>
+                    <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-5 gap-2 w-full">
+                      {availableDays.map((day, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => setSelectedDate(day.rawDate)}
+                          className={`flex flex-col items-center justify-center py-2.5 px-2 rounded-xl border text-center transition-all cursor-pointer ${
+                            selectedDate === day.rawDate
+                              ? 'border-[#B89565] bg-[#B89565] text-white shadow-sm'
+                              : 'border-[#E8E2D7] bg-white text-[#2B231F] hover:border-[#B89565]/60'
+                          }`}
+                        >
+                          <span className="text-[9px] uppercase tracking-wider opacity-85 font-semibold">{day.formatted.split(',')[0]}</span>
+                          <span className="text-xs sm:text-sm font-bold font-mono mt-0.5">{day.formatted.split(',')[1]}</span>
+                        </button>
+                      ))}
                     </div>
                   </div>
 
-                  {/* Vremenski slotovi (Promijenjeno na grid-cols-3 na mobitelu za uži, vertikalniji prikaz) */}
+                  {/* Vremenski slotovi - Responzivni raspored bez bježanja */}
                   {selectedDate ? (
-                    <div className="space-y-5 animate-fade-in">
+                    <div className="space-y-4 animate-booking-step">
                       <div>
-                        <label className="block text-[10px] uppercase tracking-wider mb-2.5 font-bold text-[#2B231F]/60">Prijepodne</label>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                        <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Prijepodne</label>
+                        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-2">
                           {mockTimeSlots.morning.map((time, idx) => (
                             <button
                               key={idx}
@@ -207,8 +296,8 @@ export default function BookingSystem({ servicesData = [] }) {
                       </div>
 
                       <div>
-                        <label className="block text-[10px] uppercase tracking-wider mb-2.5 font-bold text-[#2B231F]/60">Poslijepodne</label>
-                        <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
+                        <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Poslijepodne</label>
+                        <div className="grid grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 gap-2">
                           {mockTimeSlots.afternoon.map((time, idx) => (
                             <button
                               key={idx}
@@ -227,16 +316,16 @@ export default function BookingSystem({ servicesData = [] }) {
                       </div>
                     </div>
                   ) : (
-                    <div className="text-center py-8 sm:py-10 bg-[#FCFAF7] rounded-xl border border-dashed border-[#E8E2D7]">
+                    <div className="text-center py-8 bg-[#FCFAF7] rounded-xl border border-dashed border-[#E8E2D7]">
                       <p className="text-xs sm:text-sm text-[#2B231F]/60 px-4">Molimo odaberite datum za prikaz slobodnih termina.</p>
                     </div>
                   )}
                 </div>
               )}
 
-              {/* KORAK 3: Kontakt forma */}
+              {/* KORAK 3: Kontakt forma sa strogom Live Validacijom */}
               {step === 3 && (
-                <div className="animate-fade-in space-y-6">
+                <div className="animate-booking-step space-y-6 flex-1">
                   <div className="flex justify-between items-center border-b border-[#FAF7F2] pb-4 gap-4">
                     <div>
                       <h4 className="font-serif-elegant text-xl sm:text-2xl font-medium text-[#2B231F]">Kontakt podaci</h4>
@@ -254,47 +343,119 @@ export default function BookingSystem({ servicesData = [] }) {
 
                   <form onSubmit={handleSubmitBooking} className="space-y-4">
                     <div className="grid sm:grid-cols-2 gap-4">
+                      {/* Ime i prezime */}
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Ime i Prezime</label>
                         <input 
-                          type="text" required placeholder="Marija Horvat"
-                          className="w-full text-base p-3 sm:p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
+                          type="text" 
+                          required 
+                          placeholder="Marija Horvat"
+                          className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
+                            touched.name 
+                              ? isNameValid 
+                                ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500' 
+                                : 'border-red-500 focus:ring-1 focus:ring-red-500' 
+                              : 'border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]'
+                          }`}
                           value={clientData.name}
-                          onChange={(e) => setClientData({...clientData, name: e.target.value})}
+                          onBlur={() => setTouched({ ...touched, name: true })}
+                          onChange={(e) => {
+                            setClientData({...clientData, name: e.target.value});
+                            if (!touched.name) setTouched({ ...touched, name: true });
+                          }}
                         />
+                        {touched.name && (
+                          <p className={`text-[11px] mt-1 font-semibold ${isNameValid ? 'text-emerald-600' : 'text-red-500'}`}>
+                            {isNameValid ? '✓ Ime izgleda dobro' : '❌ Unesite valjano ime (samo slova, 2-50 znakova)'}
+                          </p>
+                        )}
                       </div>
+
+                      {/* Broj mobitela */}
                       <div>
                         <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Broj mobitela</label>
                         <input 
-                          type="tel" required placeholder="099 123 4567"
-                          className="w-full text-base p-3 sm:p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
+                          type="tel" 
+                          required 
+                          placeholder="0991234567"
+                          className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
+                            touched.phone 
+                              ? isPhoneValid 
+                                ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500' 
+                                : 'border-red-500 focus:ring-1 focus:ring-red-500' 
+                              : 'border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]'
+                          }`}
                           value={clientData.phone}
-                          onChange={(e) => setClientData({...clientData, phone: e.target.value})}
+                          onBlur={() => setTouched({ ...touched, phone: true })}
+                          onChange={(e) => {
+                            setClientData({...clientData, phone: e.target.value});
+                            if (!touched.phone) setTouched({ ...touched, phone: true });
+                          }}
                         />
+                        {touched.phone && (
+                          <p className={`text-[11px] mt-1 font-semibold ${isPhoneValid ? 'text-emerald-600' : 'text-red-500'}`}>
+                            {isPhoneValid ? '✓ Broj mobitela je valjan' : '❌ Koristite format 09xxxxxxx ili +385xxxxxxx'}
+                          </p>
+                        )}
                       </div>
                     </div>
 
+                    {/* E-mail */}
                     <div>
                       <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">E-mail adresa (za potvrdu)</label>
                       <input 
-                        type="email" required placeholder="marija@gmail.com"
-                        className="w-full text-base p-3 sm:p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
+                        type="email" 
+                        required 
+                        placeholder="marija@gmail.com"
+                        className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
+                          touched.email 
+                            ? isEmailValid 
+                              ? 'border-emerald-500 focus:ring-1 focus:ring-emerald-500' 
+                              : 'border-red-500 focus:ring-1 focus:ring-red-500' 
+                            : 'border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]'
+                        }`}
                         value={clientData.email}
-                        onChange={(e) => setClientData({...clientData, email: e.target.value})}
+                        onBlur={() => setTouched({ ...touched, email: true })}
+                        onChange={(e) => {
+                          setClientData({...clientData, email: e.target.value});
+                          if (!touched.email) setTouched({ ...touched, email: true });
+                        }}
                       />
+                      {touched.email && (
+                        <p className={`text-[11px] mt-1 font-semibold ${isEmailValid ? 'text-emerald-600' : 'text-red-500'}`}>
+                          {isEmailValid ? '✓ E-mail je ispravan' : '❌ Unesite ispravnu e-mail adresu'}
+                        </p>
+                      )}
                     </div>
 
+                    {/* Napomena s brojačem znakova */}
                     <div>
-                      <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">Napomena za salon (opcionalno)</label>
+                      <div className="flex justify-between items-center mb-2">
+                        <label className="block text-[10px] uppercase tracking-wider font-bold text-[#2B231F]/60">Napomena za salon (opcionalno)</label>
+                        <span className={`text-[11px] font-mono ${isNoteValid ? 'text-[#2B231F]/50' : 'text-red-500 font-bold'}`}>
+                          {clientData.note.length} / 300
+                        </span>
+                      </div>
                       <textarea 
-                        rows="2" placeholder="Posebne napomene..."
-                        className="w-full text-base p-3 sm:p-3.5 rounded-xl border border-[#E8E2D7] bg-[#FCFAF7] focus:outline-none focus:ring-1 focus:ring-[#B89565] text-[#2B231F] transition-all"
+                        rows="2" 
+                        placeholder="Imate li kakve napomene, alergije ili specifične želje?"
+                        className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
+                          isNoteValid ? 'border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]' : 'border-red-500 focus:ring-1 focus:ring-red-500'
+                        }`}
                         value={clientData.note}
                         onChange={(e) => setClientData({...clientData, note: e.target.value})}
                       ></textarea>
                     </div>
 
-                    <button type="submit" className="w-full mt-2 py-3.5 sm:py-4 bg-[#2B231F] hover:bg-[#B89565] text-white text-xs sm:text-sm font-bold rounded-xl uppercase tracking-widest transition-all cursor-pointer shadow-md active:scale-[0.98]">
+                    <button 
+                      type="submit" 
+                      disabled={!isFormValid}
+                      className={`w-full mt-2 py-4 text-xs sm:text-sm font-bold rounded-xl uppercase tracking-widest transition-all shadow-md active:scale-[0.98] ${
+                        isFormValid 
+                          ? 'bg-[#2B231F] hover:bg-[#B89565] text-white cursor-pointer' 
+                          : 'bg-neutral-200 text-neutral-400 cursor-not-allowed opacity-60'
+                      }`}
+                    >
                       Potvrdi i rezerviraj termin
                     </button>
                   </form>
@@ -303,7 +464,7 @@ export default function BookingSystem({ servicesData = [] }) {
 
               {/* KORAK 4: Potvrda uspjeha */}
               {step === 4 && (
-                <div className="animate-fade-in text-center py-4 space-y-6">
+                <div className="animate-booking-step text-center py-2 space-y-6 flex-1">
                   <div className="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 sm:w-6 sm:h-6">
                       <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
@@ -311,12 +472,12 @@ export default function BookingSystem({ servicesData = [] }) {
                   </div>
                   
                   <div className="space-y-1.5">
-                    <h4 className="font-serif-elegant text-2xl sm:text-3xl font-light text-[#2B231F]">Vidimo se uskoro!</h4>
-                    <p className="text-xs sm:text-sm text-neutral-500 px-4">Termin je uspješno zabilježen u našem kalendaru.</p>
+                    <h4 className="font-serif-elegant text-2xl sm:text-3xl font-light text-[#2B231F]">Rezervacija zaprimljena!</h4>
+                    <p className="text-xs sm:text-sm text-neutral-500 px-4">Vidimo se uskoro! Vaš termin je službeno zapisan.</p>
                   </div>
 
-                  {/* Detalji potvrde (Prilagođeno da se slaže vertikalno na mobitelu) */}
-                  <div className="max-w-md mx-auto bg-[#FCFAF7] border-2 border-[#E5DEC9] rounded-2xl p-4 sm:p-6 text-left space-y-4 shadow-sm relative overflow-hidden">
+                  {/* Komercijalna kartica s detaljima */}
+                  <div className="max-w-md mx-auto bg-[#FCFAF7] border-2 border-[#E5DEC9] rounded-2xl p-5 text-left space-y-4 shadow-sm relative overflow-hidden">
                     <div className="absolute top-0 right-0 w-20 h-20 bg-[#E5DEC9]/15 rounded-full -translate-y-6 translate-x-6"></div>
                     
                     <div className="border-b border-[#E5DEC9]/50 pb-3">
@@ -324,7 +485,6 @@ export default function BookingSystem({ servicesData = [] }) {
                       <h5 className="font-serif-elegant text-base sm:text-lg text-[#2B231F] mt-0.5">{selectedService?.name}</h5>
                     </div>
 
-                    {/* Prebačeno iz grid-cols-2 u grid-cols-1 na mobitelu */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-[#2B231F]">
                       <div className="space-y-0.5">
                         <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Datum i Vrijeme</p>
@@ -335,27 +495,62 @@ export default function BookingSystem({ servicesData = [] }) {
                         <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Klijent</p>
                         <p className="font-semibold">{clientData.name}</p>
                         <p className="text-xs text-[#2B231F]/70 mt-0.5">{clientData.phone}</p>
+                        <p className="text-xs text-[#2B231F]/70 truncate">{clientData.email}</p>
                       </div>
                     </div>
 
-                    {/* Prebačeno u flex-col na mobitelu za čišći raspored bez gužvanja */}
                     <div className="border-t border-[#E5DEC9]/50 pt-3 flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 sm:gap-4">
                       <div className="text-left">
                         <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Lokacija salona</p>
                         <p className="text-xs sm:text-sm font-semibold text-[#2B231F]">Krbavska ulica 15, Osijek</p>
                       </div>
                       <div className="text-left sm:text-right">
-                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Cijena</p>
+                        <p className="text-[9px] uppercase tracking-wider text-[#2B231F]/50 font-bold">Cijena tretmana</p>
                         <p className="text-sm sm:text-lg font-bold font-mono text-[#B89565]">{selectedService?.price} €</p>
                       </div>
                     </div>
                   </div>
 
-                  <p className="text-xs text-neutral-500 max-w-sm mx-auto leading-relaxed px-4">
-                    Detalji rezervacije poslani su na <strong className="font-semibold text-neutral-700">{clientData.email}</strong>. Ako trebate promjenu, nazovite nas najkasnije 24 sata ranije.
-                  </p>
+                  {/* Važno upozorenje oko e-mail potvrde */}
+                  <div className="bg-amber-50/50 border border-amber-200/50 rounded-xl p-3 max-w-md mx-auto text-center text-xs text-amber-800">
+                    <p className="leading-relaxed">
+                      Na e-mail <strong>{clientData.email}</strong> smo poslali potvrdu rezervacije. 
+                      <span className="block mt-1 font-semibold">Ako ne vidite poruku, provjerite Spam ili Promocije.</span>
+                    </p>
+                  </div>
 
-                  <div className="pt-2">
+                  {/* Kalendar Integracije */}
+                  <div className="max-w-md mx-auto pt-2 space-y-2">
+                    <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">Spremi termin u kalendar</p>
+                    <div className="grid grid-cols-3 gap-2">
+                      <a 
+                        href={googleUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center justify-center p-2 rounded-xl border border-[#E8E2D7] bg-white hover:border-[#B89565] transition-all text-[10px] font-bold text-[#2B231F] gap-1"
+                      >
+                        <span>Google</span>
+                      </a>
+                      <a 
+                        href={icalUrl} 
+                        download="tretman-rezervacija.ics"
+                        className="flex flex-col items-center justify-center p-2 rounded-xl border border-[#E8E2D7] bg-white hover:border-[#B89565] transition-all text-[10px] font-bold text-[#2B231F] gap-1"
+                      >
+                        <span>Apple iCal</span>
+                      </a>
+                      <a 
+                        href={outlookUrl} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="flex flex-col items-center justify-center p-2 rounded-xl border border-[#E8E2D7] bg-white hover:border-[#B89565] transition-all text-[10px] font-bold text-[#2B231F] gap-1"
+                      >
+                        <span>Outlook</span>
+                      </a>
+                    </div>
+                  </div>
+
+                  {/* Gumb za ponovni početak */}
+                  <div className="pt-4">
                     <button 
                       onClick={() => {
                         setStep(1);
@@ -363,6 +558,7 @@ export default function BookingSystem({ servicesData = [] }) {
                         setSelectedDate("");
                         setSelectedTime("");
                         setClientData({ name: "", phone: "", email: "", note: "" });
+                        setTouched({ name: false, phone: false, email: false });
                       }}
                       className="text-[10px] font-bold text-[#B89565] uppercase tracking-widest hover:text-[#2B231F] transition-colors py-2.5 px-5 sm:py-3 sm:px-6 rounded-full border-2 border-[#B89565]/40 hover:border-[#2B231F]"
                     >
@@ -375,7 +571,6 @@ export default function BookingSystem({ servicesData = [] }) {
             </div>
           </div>
         </div>
-
       </div>
     </section>
   );
