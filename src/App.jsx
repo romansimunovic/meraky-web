@@ -124,12 +124,12 @@ export default function App() {
       <section className="relative overflow-hidden py-16 sm:py-24 lg:py-32">
         <div className="absolute inset-0 organic-leaf-shadow pointer-events-none opacity-20"></div>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 text-center relative z-10 space-y-6">
-          <p className="text-[11px] uppercase tracking-[0.3em] text-brand-gold font-bold">Oaza mira u Osijeku</p>
+          <p className="text-[20px] uppercase tracking-[0.3em] text-brand-gold font-bold">Meraky Salon</p>
           <h1 className="font-serif-elegant text-4xl sm:text-6xl lg:text-7xl font-light text-brand-espresso leading-tight">
             Tvoj trenutak <br /> potpunog sklada.
           </h1>
           <p className="font-serif-elegant text-xl sm:text-3xl text-brand-espresso/80 italic max-w-2xl mx-auto font-light leading-relaxed">
-            "Mjesto gdje se spajaju napredna kozmetologija, opuštajući rituali i mir koji ti je prijeko potreban."
+            Mjesto gdje se spajaju napredna kozmetologija, opuštajući rituali i mir koji ti je prijeko potreban.
           </p>
           <div className="pt-6 flex flex-col sm:flex-row justify-center gap-4 px-4">
             <a 
@@ -151,7 +151,7 @@ export default function App() {
       {/* SERVICES SECTION */}
       <section id="tretmani" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-brand-sand/60">
         <div className="text-center max-w-xl mx-auto mb-12">
-          <p className="text-[11px] uppercase tracking-[0.25em] text-brand-gold font-bold mb-2">Naš Ritualni Cjenik</p>
+          <p className="text-[20px] uppercase tracking-[0.25em] text-brand-gold font-bold mb-2">Cjenik</p>
           <h2 className="font-serif-elegant text-3xl sm:text-4xl font-light text-brand-espresso">Otkrij našu ponudu</h2>
           <p className="text-sm sm:text-base text-brand-espresso/75 mt-2">Svakom tretmanu pristupamo individualno uz vrhunsku kozmetiku i holistički pristup.</p>
         </div>
@@ -182,7 +182,7 @@ export default function App() {
         <div className="bg-white rounded-3xl border border-brand-sand p-6 sm:p-10 max-w-3xl mx-auto shadow-sm transition-all duration-300">
           <div className="mb-8 pb-5 border-b border-brand-sand/50">
             <p className="text-lg sm:text-xl font-serif-elegant italic text-brand-espresso font-medium leading-relaxed">
-              "{servicesData[activeTab].subtitle}"
+              {servicesData[activeTab].subtitle}
             </p>
           </div>
 
@@ -220,7 +220,7 @@ export default function App() {
             </h3>
             <div className="w-16 h-[2px] bg-brand-gold my-6"></div>
             <p className="font-serif-elegant italic text-lg sm:text-2xl text-brand-espresso/80 font-light leading-relaxed">
-              "Meraky prostor u kojem vanjski svijet nakratko prestaje postojati."
+              Meraky je prostor u kojem vanjski svijet nakratko prestaje postojati.
             </p>
           </div>
 

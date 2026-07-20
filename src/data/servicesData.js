@@ -1,7 +1,7 @@
 export const servicesData = [
   {
     category: "Rituali i napredna njega lica",
-    subtitle: "Vrati koži prirodnu blistavost i svježinu kroz personalizirane skincare protokole",
+    subtitle: "Vrati koži prirodnu blistavost i svježinu kroz personalizirane skincare tretmane",
     icon: "face",
     items: [
       { name: "Kompletna njega lica", price: 25, duration: "45 min" },
