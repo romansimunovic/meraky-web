@@ -205,8 +205,8 @@ export default function BookingSystem({ servicesData = [] }) {
               {step === 1 && (
                 <div className="animate-booking-step space-y-4 flex-1">
                   <div className="text-left mb-5">
-                    <h4 className="font-serif-elegant text-xl sm:text-2xl font-medium text-[#2B231F]">Odaberi tretman</h4>
-                    <p className="text-xs text-[#2B231F]/60 mt-1">Izaberi željenu uslugu iz našeg ritualnog cjenika</p>
+                    <h4 className="font-serif-elegant text-xl sm:text-2xl font-medium text-[#2B231F]">Rezerviraj svoj termin</h4>
+                    <p className="text-base text-[#2B231F]/60 mt-1">Izaberi uslugu</p>
                   </div>
                   
                   <div className="max-h-[360px] overflow-y-auto pr-1 space-y-3 scrollbar-none">

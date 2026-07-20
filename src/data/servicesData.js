@@ -2,21 +2,26 @@ export const servicesData = [
   {
     category: "Rituali i napredna njega lica",
     subtitle: "Vrati koži prirodnu blistavost i svježinu kroz personalizirane skincare protokole",
-    icon: "face", // Ključ za iOS-style ikonu
+    icon: "face",
     items: [
-      { name: "Deep Glow hidratacija lica", price: 45, duration: "45 min" },
-      { name: "Anti-age lifting ritual s masažom", price: 60, duration: "60 min" },
-      { name: "Ultrazvučno čišćenje i revitalizacija", price: 50, duration: "50 min" }
+      { name: "Kompletna njega lica", price: 25, duration: "45 min" },
+      { name: "Čišćenje lica", price: 30, duration: "60 min" },
+      { name: "Ampula", price: 3, duration: "10 min" },
+      { name: "Masaža lica", price: 7, duration: "15 min" }
     ]
   },
   {
     category: "Holističke masaže i terapije",
-    subtitle: "Resetiraj um i oslobodi tijelo napetosti uz pomno birane tehnike dodira",
+    subtitle: "Resetiraj um i oslobodi tijelo napetosti uz pomno birane tehinke dodira",
     icon: "massage",
     items: [
-      { name: "Meraky signature opuštajuća masaža", price: 40, duration: "50 min" },
-      { name: "Masaža toplim uljima & aromaterapija", price: 45, duration: "60 min" },
-      { name: "Antistresna masaža leđa i vrata", price: 25, duration: "30 min" }
+      { name: "Klasična masaža – cijelo tijelo", price: 25, duration: "45 min" },
+      { name: "Masaža leđa", price: 18, duration: "30 min" },
+      { name: "Anticelulitna masaža", price: 15, duration: "30 min" },
+      { name: "Masaža vlasišta, vrata i dekoltea", price: 10, duration: "20 min" },
+      { name: "Masaža stopala", price: 8, duration: "15 min" },
+      { name: "Parafinska kupka za ruke", price: 7, duration: "20 min" },
+      { name: "Čišćenje leđa", price: 16, duration: "45 min" }
     ]
   },
   {
@@ -24,9 +29,13 @@ export const servicesData = [
     subtitle: "Lakoća svakog koraka uz medicinsku i estetsku njegu vrhunskih brandova",
     icon: "foot",
     items: [
-      { name: "Estetska pedikura s trajnim lakom", price: 35, duration: "50 min" },
-      { name: "Medicinski tretman stopala & njega", price: 40, duration: "60 min" },
-      { name: "SPA kupka i masaža stopala", price: 20, duration: "30 min" }
+      { name: "Njega stopala žene", price: 19, duration: "45 min" },
+      { name: "Njega stopala + trajni lak", price: 30, duration: "60 min" },
+      { name: "Trajni lak noge", price: 15, duration: "30 min" },
+      { name: "Ureživanje noktiju stopala", price: 8, duration: "20 min" },
+      { name: "Skraćivanje noktiju stopala", price: 5, duration: "15 min" },
+      { name: "Parafinska kupka stopala", price: 8, duration: "20 min" },
+      { name: "Lakiranje noktiju", price: 3, duration: "10 min" }
     ]
   },
   {

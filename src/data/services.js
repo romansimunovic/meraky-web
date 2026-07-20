@@ -48,5 +48,31 @@ export const services = [
       { name: "Depilacija stražnjice (vosak / pasta)", price: "8 / 10" },
       { name: "Depilacija pazuha (šećerna pasta)", price: 8 }
     ]
+  },
+  {
+    category: "Njega tijela i masaže",
+    icon: "activity",
+    items: [
+      { name: "Klasična masaža – cijelo tijelo", price: 25 },
+      { name: "Masaža leđa", price: 18 },
+      { name: "Anticelulitna masaža", price: 15 },
+      { name: "Masaža vlasišta, vrata i dekoltea", price: 10 },
+      { name: "Masaža stopala", price: 8 },
+      { name: "Parafinska kupka za ruke", price: 7 },
+      { name: "Čišćenje leđa", price: 16 }
+    ]
+  },
+  {
+    category: "Njega stopala",
+    icon: "foot",
+    items: [
+      { name: "Njega stopala žene", price: 19 },
+      { name: "Ureživanje noktiju stopala", price: 8 },
+      { name: "Skraćivanje noktiju stopala", price: 5 },
+      { name: "Trajni lak noge", price: 15 },
+      { name: "Lakiranje noktiju", price: 3 },
+      { name: "Parafinska kupka stopala", price: 8 },
+      { name: "Njega stopala + trajni lak", price: 30 }
+    ]
   }
 ];
