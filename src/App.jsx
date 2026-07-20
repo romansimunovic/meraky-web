@@ -43,16 +43,13 @@ function ServiceIcon({ type }) {
 export default function App() {
   const [activeTab, setActiveTab] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-// Stanja za praćenje prenesene usluge u kalendar
   const [preselectedCategory, setPreselectedCategory] = useState("");
   const [preselectedItem, setPreselectedItem] = useState("");
 
-  // Funkcija koja se okida kada klijent klikne "Rezerviraj →" u cjeniku
   const handleQuickBook = (categoryName, itemName) => {
     setPreselectedCategory(categoryName);
     setPreselectedItem(itemName);
     
-    // Glatko skrolanje do booking sustava
     const bookingSection = document.getElementById('rezervacija');
     if (bookingSection) {
       bookingSection.scrollIntoView({ behavior: 'smooth' });
@@ -82,13 +79,37 @@ export default function App() {
             <a href="#kontakt" className="hover:text-brand-gold transition-colors text-brand-espresso">Kontakt</a>
           </nav>
 
+          {/* SOCIJALNE IKONE (UMJESTO GUMBA REZERVIRAJ) */}
           <div className="flex items-center gap-4">
-            <a 
-              href="#rezervacija" 
-              className="bg-brand-espresso hover:bg-brand-gold text-white text-[11px] uppercase tracking-widest font-bold py-3 px-6 rounded-full transition-all duration-300 shadow-sm active:scale-95"
-            >
-              Rezerviraj
-            </a>
+            <div className="flex items-center gap-3 sm:gap-4 mr-2 md:mr-0">
+              {/* INSTAGRAM LINK */}
+              <a 
+                href="https://www.instagram.com/merakycare/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-brand-espresso hover:text-brand-gold transition-colors p-2"
+                aria-label="Instagram profil"
+              >
+                <svg className="w-5 h-5 sm:w-[22px] sm:h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+
+              {/* FACEBOOK LINK */}
+              <a 
+                href="https://www.facebook.com/p/Meraky-Beauty-and-Care-100094700135644/" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-brand-espresso hover:text-brand-gold transition-colors p-2"
+                aria-label="Facebook stranica"
+              >
+                <svg className="w-5 h-5 sm:w-[22px] sm:h-[22px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+              </a>
+            </div>
 
             {/* HAMBURGER GUMB ZA MOBITELE */}
             <button 
@@ -151,13 +172,13 @@ export default function App() {
               href="#rezervacija" 
               className="bg-brand-espresso hover:bg-brand-gold text-white text-sm font-bold uppercase tracking-widest py-4 px-8 rounded-lg transition-all duration-300 shadow-md text-center"
             >
-              Odaberi slobodan termin
+              REZERVIRAJ
             </a>
             <a 
               href="#tretmani" 
               className="border-2 border-brand-sand hover:border-brand-espresso bg-white/70 text-brand-espresso text-sm font-bold uppercase tracking-widest py-4 px-8 rounded-lg transition-all duration-300 text-center"
             >
-              Istraži naš cjenik
+              USLUGE
             </a>
           </div>
         </div>
@@ -171,7 +192,6 @@ export default function App() {
           <p className="text-sm sm:text-base text-brand-espresso/75 mt-2">Svakom tretmanu pristupamo individualno uz vrhunsku kozmetiku i holistički pristup.</p>
         </div>
 
-        {/* Luksuzni tabovi s podrškom za vodoravni scroll na mobitelima */}
         {/* Tabovi za kategorije */}
         <div className="w-full overflow-x-auto pb-4 mb-8 scrollbar-none touch-scroll">
           <div className="flex gap-3 px-1 md:justify-center min-w-max">
@@ -203,7 +223,6 @@ export default function App() {
                 <div className="flex items-center justify-between sm:justify-end gap-6 flex-shrink-0">
                   <span className="text-sm sm:text-base font-semibold font-mono text-brand-gold">{item.price} €</span>
                   
-                  {/*button koji okida handleQuickBook */}
                   <button 
                     onClick={() => handleQuickBook(servicesData[activeTab].category, item.name)}
                     className="text-xs uppercase tracking-wider font-bold text-brand-espresso/60 hover:text-brand-gold transition-colors cursor-pointer"
@@ -262,7 +281,6 @@ export default function App() {
 
       {/* BOOKING SUSTAV */}
       <div id="rezervacija" className="bg-brand-clay py-8 border-t border-brand-sand/60">
-        {/* Prosljeđuje preselect vrijednosti u komponentu */}
         <BookingSystem 
           servicesData={servicesData} 
           initialCategory={preselectedCategory}
@@ -274,7 +292,7 @@ export default function App() {
       <footer id="kontakt" className="bg-brand-espresso text-brand-cream py-16 border-t border-white/10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 grid grid-cols-1 md:grid-cols-3 gap-12 text-center md:text-left">
           
-          {/* LOGO U FOOTERU S KONTRASTNOM ZALEĐINOM */}
+          {/* LOGO U FOOTERU */}
           <div className="space-y-4 flex flex-col items-center md:items-start">
             <div className="bg-brand-cream/10 p-2.5 rounded-xl inline-block backdrop-blur-sm border border-white/5 shadow-inner">
               <img 
@@ -288,33 +306,26 @@ export default function App() {
             </p>
           </div>
           
-          {/* LOKACIJA, KONTAKT I RADNO VRIJEME (Spojeno u jedan stupac radi ravnoteže) */}
-<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-8 text-center sm:text-left">
-  <div className="space-y-3">
-    <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Lokacija i Kontakt</h5>
-    <div className="space-y-1.5 text-sm text-brand-cream/90 flex flex-col items-center sm:items-start md:items-start">
-      <p>Krbavska ulica 15, 31000 Osijek</p>
-      
-      {/* KLIKABILNI TELEFON */}
-      <a 
-        href="tel:+385992781199" 
-        className="hover:text-brand-gold transition-colors duration-200 flex items-center gap-1"
-      >
-        Telefon: 099 278 1199
-      </a>
-      
-      {/* KLIKABILNI EMAIL */}
-      <a 
-        href="mailto:merakycare@gmail.com" 
-        className="hover:text-brand-gold transition-colors duration-200 flex items-center gap-1"
-      >
-        E-mail: merakycare@gmail.com
-      </a>
-    </div>
-  </div>
-  
-
-
+          {/* LOKACIJA, KONTAKT I RADNO VRIJEME */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-8 text-center sm:text-left">
+            <div className="space-y-3">
+              <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Lokacija i Kontakt</h5>
+              <div className="space-y-1.5 text-sm text-brand-cream/90 flex flex-col items-center sm:items-start md:items-start">
+                <p>Krbavska ulica 15, 31000 Osijek</p>
+                <a 
+                  href="tel:+385992781199" 
+                  className="hover:text-brand-gold transition-colors duration-200"
+                >
+                  Telefon: 099 278 1199
+                </a>
+                <a 
+                  href="mailto:merakycare@gmail.com" 
+                  className="hover:text-brand-gold transition-colors duration-200"
+                >
+                  E-mail: merakycare@gmail.com
+                </a>
+              </div>
+            </div>
             
             <div className="space-y-3">
               <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Radno Vrijeme</h5>
@@ -326,7 +337,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* INTEGRACIJA GOOGLE MAPSA (Treći stupac na desktopu, na dnu na mobitelu) */}
+          {/* GOOGLE MAPS */}
           <div className="space-y-4 w-full">
             <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold text-center md:text-left">Gdje se nalazimo</h5>
             <div className="w-full overflow-hidden rounded-2xl border border-white/10 shadow-lg group">
