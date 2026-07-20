@@ -274,23 +274,59 @@ export default function App() {
             </p>
           </div>
           
-          <div className="space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Lokacija i Kontakt</h5>
-            <div className="space-y-1.5 text-sm text-brand-cream/90">
-              <p>Krbavska ulica 15, 31000 Osijek</p>
-              <p>Telefon: 099 123 4567</p>
-              <p>E-mail: info@meraky-beauty.hr</p>
+          {/* LOKACIJA, KONTAKT I RADNO VRIJEME (Spojeno u jedan stupac radi ravnoteže) */}
+<div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-1 gap-8 text-center sm:text-left">
+  <div className="space-y-3">
+    <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Lokacija i Kontakt</h5>
+    <div className="space-y-1.5 text-sm text-brand-cream/90 flex flex-col items-center sm:items-start md:items-start">
+      <p>Krbavska ulica 15, 31000 Osijek</p>
+      
+      {/* KLIKABILNI TELEFON */}
+      <a 
+        href="tel:+385992781199" 
+        className="hover:text-brand-gold transition-colors duration-200 flex items-center gap-1"
+      >
+        Telefon: 099 278 1199
+      </a>
+      
+      {/* KLIKABILNI EMAIL */}
+      <a 
+        href="mailto:merakycare@gmail.com" 
+        className="hover:text-brand-gold transition-colors duration-200 flex items-center gap-1"
+      >
+        E-mail: merakycare@gmail.com
+      </a>
+    </div>
+  </div>
+  
+
+
+            
+            <div className="space-y-3">
+              <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Radno Vrijeme</h5>
+              <div className="space-y-1.5 text-sm text-brand-cream/90">
+                <p>Pon - Pet: 08:00 - 20:00</p>
+                <p>Subota: 08:00 - 14:00</p>
+                <p>Nedjelja: Zatvoreno</p>
+              </div>
             </div>
           </div>
-          
-          <div className="space-y-4">
-            <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Radno Vrijeme</h5>
-            <div className="space-y-1.5 text-sm text-brand-cream/90">
-              <p>Pon - Pet: 08:00 - 20:00</p>
-              <p>Subota: 08:00 - 14:00</p>
-              <p>Nedjelja: Zatvoreno</p>
+
+          {/* INTEGRACIJA GOOGLE MAPSA (Treći stupac na desktopu, na dnu na mobitelu) */}
+          <div className="space-y-4 w-full">
+            <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold text-center md:text-left">Gdje se nalazimo</h5>
+            <div className="w-full overflow-hidden rounded-2xl border border-white/10 shadow-lg group">
+              <iframe 
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2794.0176577218!2d18.68137427661016!3d45.549970327711264!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x475ce798a6bcb3b5%3A0x2a4d7dc3d34c83c6!2sMeraky%20Beauty%20and%20Care!5e0!3m2!1sen!2shr!4v1784542639157!5m2!1sen!2shr" 
+                className="w-full h-60 grayscale-[30%] contrast-[110%] transition-all duration-500 group-hover:grayscale-0 block"
+                style={{ border: 0 }} 
+                allowFullScreen="" 
+                loading="lazy" 
+                referrerPolicy="strict-origin-when-cross-origin"
+              />
             </div>
           </div>
+
         </div>
         
         <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16 pt-8 border-t border-white/10 text-center text-xs text-brand-cream/50">
