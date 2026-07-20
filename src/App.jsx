@@ -45,6 +45,11 @@ export default function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [preselectedCategory, setPreselectedCategory] = useState("");
   const [preselectedItem, setPreselectedItem] = useState("");
+  const [revealedCard, setRevealedCard] = useState(null);
+
+  const toggleCard = (cardName) => {
+  setRevealedCard(revealedCard === cardName ? null : cardName);
+};
 
   const handleQuickBook = (categoryName, itemName) => {
     setPreselectedCategory(categoryName);
@@ -75,7 +80,7 @@ export default function App() {
           {/* DESKTOP NAV */}
           <nav className="hidden md:flex items-center gap-10 text-xs uppercase tracking-widest font-bold">
             <a href="#tretmani" className="hover:text-brand-gold transition-colors text-brand-espresso">Usluge</a>
-            <a href="#o-salonu" className="hover:text-brand-gold transition-colors text-brand-espresso">O nama</a>
+            <a href="#nas-rad" className="hover:text-brand-gold transition-colors text-brand-espresso">Naš rad</a>
             <a href="#kontakt" className="hover:text-brand-gold transition-colors text-brand-espresso">Kontakt</a>
           </nav>
 
@@ -236,48 +241,132 @@ export default function App() {
         </div>
       </section>
 
-      {/* O NAMA SEKCIJA */}
-      <section id="o-salonu" className="py-20 bg-white border-t border-brand-sand/60 relative overflow-hidden">
+      {/* SEKCIJA NAŠ RAD */}
+      <section id="nas-rad" className="py-16 sm:py-20 bg-white border-t border-brand-sand/60 relative overflow-hidden">
         <div className="absolute inset-0 organic-leaf-shadow pointer-events-none opacity-5"></div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 grid lg:grid-cols-12 gap-12 items-center relative z-10">
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
           
-          <div className="lg:col-span-5 space-y-6">
-            <p className="text-[15px] uppercase tracking-[0.25em] text-brand-gold font-bold">Filozofija Salona</p>
-            <h3 className="font-serif-elegant text-4xl sm:text-5xl font-light text-brand-espresso leading-tight">
-              Ljepota je u osjećaju usporavanja.
+          {/* Naslov sekcije */}
+          <div className="text-center max-w-xl mx-auto mb-12 sm:text-center">
+            <p className="text-[20px] uppercase tracking-[0.25em] text-brand-gold font-bold mb-2">Galerija</p>
+            <h3 className="font-serif-elegant text-3xl sm:text-5xl font-light text-brand-espresso">
+              Ambijent i Tretmani
             </h3>
-            <div className="w-16 h-[2px] bg-brand-gold my-6"></div>
-            <p className="font-serif-elegant italic text-lg sm:text-2xl text-brand-espresso/80 font-light leading-relaxed">
-              Meraky je prostor u kojem vanjski svijet nakratko prestaje postojati.
+            <div className="w-16 h-[2px] bg-brand-gold mx-auto mt-4"></div>
+            <p className="text-sm sm:text-base text-brand-espresso/75 mt-4">
+              Atmosfera i rezultati posvećeni ljepoti vaše kože.
             </p>
           </div>
 
-          <div className="lg:col-span-7 space-y-6 text-sm sm:text-base text-brand-espresso/80 leading-relaxed">
-            <p>
-              Vjerujemo da se prava estetika krije u detaljima. Zato smo kreirali prostor u kojem se preklapaju vrhunsko stručno znanje, napredni dermatološki protokoli i čisti, opuštajući holistički rituali. Bez žurbe, bez stresa i s maksimalnim fokusom na potrebe tvog tijela i kože.
-            </p>
-            <p>
-              Svaki naš tretman lica započinje detaljnom analizom kože kako bismo odabrali idealne aktivne sastojke, dok su naše masaže i pedikure osmišljene kao cjeloviti SPA rituali koji vraćaju lakoću koraku i mir umu. 
-            </p>
+          {/* Grid raspored: Na mobitelu jedno ispod drugog (col-1), na webu jedno pored drugog (md:grid-cols-3) */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch max-w-md mx-auto md:max-w-none">
             
-            <div className="grid grid-cols-3 gap-6 pt-6 border-t border-brand-clay">
-              <div>
-                <p className="font-serif-elegant text-4xl sm:text-3xl text-brand-gold font-light">100 %</p>
-                <p className="text-[12px] uppercase tracking-wider text-brand-espresso/60 font-bold mt-1">Individualno</p>
-              </div>
-              <div>
-                <p className="font-serif-elegant text-2xl sm:text-3xl text-brand-gold font-light">Premium</p>
-                <p className="text-[12px] uppercase tracking-wider text-brand-espresso/60 font-bold mt-1">Kozmetika</p>
-              </div>
-              <div>
-                <p className="font-serif-elegant text-2xl sm:text-3xl text-brand-gold font-light">Osijek</p>
-                <p className="text-[12px] uppercase tracking-wider text-brand-espresso/60 font-bold mt-1">Lokacija</p>
+            {/* 1. Vertikalni Video (720x1280) */}
+            <div className="relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm bg-brand-clay/20 aspect-[9/16] w-full">
+              <video
+                src="/images/demonstracija.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-cover pointer-events-none"
+              />
+              <div className="absolute inset-0 bg-brand-espresso/5 pointer-events-none"></div>
+              <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-xl border border-brand-sand/40">
+                <p className="text-xs uppercase tracking-widest font-bold text-brand-espresso">Holistički pristup</p>
+                <p className="text-[11px] text-brand-espresso/70 mt-0.5">Rituali opuštanja i njege lica</p>
               </div>
             </div>
+
+            {/* 2. Kartica: Tretman lica */}
+            <div 
+              onClick={() => toggleCard('tretmani')}
+              className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full cursor-pointer bg-brand-espresso text-white select-none"
+            >
+              <img 
+                src="/images/tretmanlica.jpg" 
+                alt="Tretman lica u Meraky salonu" 
+                className={`w-full h-full object-cover transition-all duration-500 ${
+                  revealedCard === 'tretmani' ? 'scale-105 blur-sm' : 'md:group-hover:scale-105 md:group-hover:blur-sm'
+                }`}
+              />
+              
+              {/* Crni veo / Overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-t from-brand-espresso/90 via-brand-espresso/40 to-brand-espresso/20 transition-opacity duration-500 ${
+                revealedCard === 'tretmani' ? 'opacity-95' : 'opacity-40 md:group-hover:opacity-95'
+              }`}></div>
+              
+              {/* Sadržaj i tekst */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <span className={`text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1 transition-all duration-500 ${
+                  revealedCard === 'tretmani' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0'
+                }`}>
+                  Njega Kože
+                </span>
+                <h4 className="font-serif-elegant text-2xl font-light text-white mb-2">
+                  Tretmani lica
+                </h4>
+                <p className={`text-xs text-brand-cream/90 transition-all duration-500 leading-relaxed ${
+                  revealedCard === 'tretmani' ? 'opacity-100 translate-y-0 h-auto mt-1' : 'opacity-0 translate-y-4 h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:h-auto md:group-hover:mt-1'
+                }`}>
+                  Dubinska analiza, hidratacija i napredni dermatološki protokoli prilagođeni vašem tipu kože uz vrhunsku premium kozmetiku.
+                </p>
+                
+                {/* Indikator za klik na mobitelu kad je zatvoreno */}
+                {revealedCard !== 'tretmani' && (
+                  <span className="text-[10px] text-brand-cream/50 mt-2 block md:hidden">Dodirnite za detalje →</span>
+                )}
+              </div>
+            </div>
+
+            {/* 3. Kartica: Oblikovanje obrva */}
+            <div 
+              onClick={() => toggleCard('obrve')}
+              className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full cursor-pointer bg-brand-espresso text-white select-none"
+            >
+              <img 
+                src="/images/obrve.jpg" 
+                alt="Oblikovanje obrva u Meraky salonu" 
+                className={`w-full h-full object-cover transition-all duration-500 ${
+                  revealedCard === 'obrve' ? 'scale-105 blur-sm' : 'md:group-hover:scale-105 md:group-hover:blur-sm'
+                }`}
+              />
+              
+              {/* Crni veo / Overlay */}
+              <div className={`absolute inset-0 bg-gradient-to-t from-brand-espresso/90 via-brand-espresso/40 to-brand-espresso/20 transition-opacity duration-500 ${
+                revealedCard === 'obrve' ? 'opacity-95' : 'opacity-40 md:group-hover:opacity-95'
+              }`}></div>
+              
+              {/* Sadržaj i tekst */}
+              <div className="absolute inset-0 flex flex-col justify-end p-6">
+                <span className={`text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1 transition-all duration-500 ${
+                  revealedCard === 'obrve' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0'
+                }`}>
+                  Estetika
+                </span>
+                <h4 className="font-serif-elegant text-2xl font-light text-white mb-2">
+                  Oblikovanje obrva
+                </h4>
+                <p className={`text-xs text-brand-cream/90 transition-all duration-500 leading-relaxed ${
+                  revealedCard === 'obrve' ? 'opacity-100 translate-y-0 h-auto mt-1' : 'opacity-0 translate-y-4 h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:h-auto md:group-hover:mt-1'
+                }`}>
+                  Precizna definicija luka i bojanje koje naglašava prirodnu ljepotu vaših očiju i sklad cijelog lica.
+                </p>
+                
+                {/* Indikator za klik na mobitelu kad je zatvoreno */}
+                {revealedCard !== 'obrve' && (
+                  <span className="text-[10px] text-brand-cream/50 mt-2 block md:hidden">Dodirnite za detalje →</span>
+                )}
+              </div>
+            </div>
+
           </div>
 
         </div>
       </section>
+
+      
 
       {/* BOOKING SUSTAV */}
       <div id="rezervacija" className="bg-brand-clay py-8 border-t border-brand-sand/60">
