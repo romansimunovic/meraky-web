@@ -8,28 +8,90 @@
     <!-- Primarni SEO Meta Tagovi -->
     <title>Meraky Beauty & Care | Kozmetički salon Osijek</title>
     <meta name="title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta name="description" content="Kozmetički salon Meraky u Osijeku nudi profesionalnu njegu lica, oblikovanje obrva, pedikuru i depilaciju u opuštajućem, minimalističkom ambijentu. Rezervirajte svoj termin." />
-    <meta name="keywords" content="kozmetički salon osijek, salon ljepote osijek, njega lica osijek, oblikovanje obrva, pedikura osijek, depilacija, meraky osijek, krbavska ulica" />
-    <meta name="robots" content="index, follow" />
+    <meta name="description" content="Kozmetički salon Meraky u Osijeku nudi profesionalnu njegu lica, vrhunske masaže, pedikuru i depilaciju u luksuznom, opuštajućem ambijentu. Rezervirajte svoj termin." />
+    <meta name="keywords" content="kozmetički salon osijek, salon ljepote osijek, njega lica osijek, oblikovanje obrva osijek, pedikura osijek, depilacija osijek, masaža osijek, meraky osijek, krbavska ulica osijek, tretmani lica" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
     <meta name="author" content="Roman Šimunović" />
+    <meta name="geo.region" content="HR-05" />
+    <meta name="geo.placename" content="Osijek" />
+    <meta name="geo.position" content="45.54997;18.68137" />
+    <meta name="ICBM" content="45.54997, 18.68137" />
 
-    <!-- Open Graph / Facebook (Prikaz na društvenim mrežama) -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://meraky-web.netlify.app/" /> <!-- Zamijeni svojim pravim linkom nakon deploya -->
+    <!-- Open Graph / Facebook (Prikaz pri dijeljenju na mrežama) -->
+    <meta property="og:type" content="business.business" />
+    <meta property="og:url" content="https://meraky-web.netlify.app/" />
     <meta property="og:title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta property="og:description" content="Otkrijte našu oazu opuštanja u Osijeku. Profesionalni tretmani lica, obrve i pedikura prilagođeni vašoj koži." />
-    <meta property="og:image" content="/og-image.jpg" /> <!-- Slika koja se prikazuje pri dijeljenju linka (stavi ju u public mapu) -->
+    <meta property="og:description" content="Otkrijte našu oazu opuštanja u Osijeku. Profesionalni tretmani lica, masaže i pedikura prilagođeni vašoj koži." />
+    <meta property="og:image" content="https://meraky-web.netlify.app/og-image.jpg" />
+    <meta property="business:contact_data:street_address" content="Krbavska ulica 15" />
+    <meta property="business:contact_data:locality" content="Osijek" />
+    <meta property="business:contact_data:postal_code" content="31000" />
+    <meta property="business:contact_data:country_name" content="Hrvatska" />
+    <meta property="business:contact_data:email" content="merakycare@gmail.com" />
+    <meta property="business:contact_data:phone_number" content="+385992781199" />
 
-    <!-- Twitter -->
+    <!-- Twitter Meta Tagovi -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://meraky-web.netlify.app/" />
     <meta property="twitter:title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta property="twitter:description" content="Profesionalni tretmani lica, njega stopala i oblikovanje obrva u Osijeku." />
-    <meta property="twitter:image" content="/og-image.jpg" />
+    <meta property="twitter:description" content="Profesionalni tretmani lica, premium njega stopala, masaže i oblikovanje obrva u Osijeku." />
+    <meta property="twitter:image" content="https://meraky-web.netlify.app/og-image.jpg" />
 
-    <!-- Google Fonts (Cormorant Garamond i Montserrat) -->
+    <!-- Google Fonts Preconnect za brže učitavanje -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+
+    <!-- JSON-LD Strukturirani podaci (Lokalni SEO za Google Maps i Rich Snippets) -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BeautySalon",
+        "name": "Meraky Beauty & Care",
+        "image": "https://meraky-web.netlify.app/images/logo_salona.png",
+        "@id": "https://meraky-web.netlify.app/#salon",
+        "url": "https://meraky-web.netlify.app/",
+        "telephone": "+385992781199",
+        "email": "merakycare@gmail.com",
+        "priceRange": "$$",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "Krbavska ulica 15",
+          "addressLocality": "Osijek",
+          "postalCode": "31000",
+          "addressCountry": "HR"
+        },
+        "geo": {
+          "@type": "GeoCoordinates",
+          "latitude": 45.54997,
+          "longitude": 18.68137
+        },
+        "openingHoursSpecification": [
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": [
+              "Monday",
+              "Tuesday",
+              "Wednesday",
+              "Thursday",
+              "Friday"
+            ],
+            "opens": "08:00",
+            "closes": "20:00"
+          },
+          {
+            "@type": "OpeningHoursSpecification",
+            "dayOfWeek": "Saturday",
+            "opens": "08:00",
+            "closes": "14:00"
+          }
+        ],
+        "sameAs": [
+          "https://www.instagram.com/merakycare/",
+          "https://www.facebook.com/p/Meraky-Beauty-and-Care-100094700135644/"
+        ]
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
