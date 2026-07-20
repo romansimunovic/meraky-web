@@ -193,7 +193,6 @@ export default function App() {
       <section id="tretmani" className="max-w-6xl mx-auto px-4 sm:px-6 py-16 border-t border-brand-sand/60">
         <div className="text-center max-w-xl mx-auto mb-12">
           <p className="text-[20px] uppercase tracking-[0.25em] text-brand-gold font-bold mb-2">Cjenik</p>
-          <h2 className="font-serif-elegant text-3xl sm:text-4xl font-light text-brand-espresso">Otkrij našu ponudu</h2>
           <p className="text-sm sm:text-base text-brand-espresso/75 mt-2">Svakom tretmanu pristupamo individualno uz vrhunsku kozmetiku i holistički pristup.</p>
         </div>
 
