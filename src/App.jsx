@@ -43,6 +43,21 @@ function ServiceIcon({ type }) {
 export default function App() {
   const [activeTab, setActiveTab] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+// Stanja za praćenje prenesene usluge u kalendar
+  const [preselectedCategory, setPreselectedCategory] = useState("");
+  const [preselectedItem, setPreselectedItem] = useState("");
+
+  // Funkcija koja se okida kada klijent klikne "Rezerviraj →" u cjeniku
+  const handleQuickBook = (categoryName, itemName) => {
+    setPreselectedCategory(categoryName);
+    setPreselectedItem(itemName);
+    
+    // Glatko skrolanje do booking sustava
+    const bookingSection = document.getElementById('rezervacija');
+    if (bookingSection) {
+      bookingSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
     <div className="min-h-screen bg-brand-cream font-sans-clean text-brand-espresso selection:bg-brand-moss selection:text-brand-espresso overflow-x-hidden">
@@ -157,6 +172,7 @@ export default function App() {
         </div>
 
         {/* Luksuzni tabovi s podrškom za vodoravni scroll na mobitelima */}
+        {/* Tabovi za kategorije */}
         <div className="w-full overflow-x-auto pb-4 mb-8 scrollbar-none touch-scroll">
           <div className="flex gap-3 px-1 md:justify-center min-w-max">
             {servicesData.map((cat, idx) => (
@@ -169,23 +185,14 @@ export default function App() {
                     : 'bg-brand-clay/30 text-brand-espresso hover:bg-brand-clay/70 border-brand-sand'
                 }`}
               >
-                <span className={activeTab === idx ? 'text-brand-gold' : 'text-brand-espresso/60 group-hover:text-brand-espresso'}>
-                  <ServiceIcon type={cat.icon} />
-                </span>
                 {cat.category}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Prikaz odabrane kategorije */}
-        <div className="bg-white rounded-3xl border border-brand-sand p-6 sm:p-10 max-w-3xl mx-auto shadow-sm transition-all duration-300">
-          <div className="mb-8 pb-5 border-b border-brand-sand/50">
-            <p className="text-lg sm:text-xl font-serif-elegant italic text-brand-espresso font-medium leading-relaxed">
-              {servicesData[activeTab].subtitle}
-            </p>
-          </div>
-
+        {/* Prikaz stavki unutar odabrane kategorije */}
+        <div className="bg-white rounded-3xl border border-brand-sand p-6 sm:p-10 max-w-3xl mx-auto shadow-sm">
           <div className="space-y-6">
             {servicesData[activeTab].items.map((item, i) => (
               <div key={i} className="flex flex-col sm:flex-row sm:justify-between sm:items-center py-4 border-b border-brand-clay last:border-0 gap-3 sm:gap-4">
@@ -195,12 +202,14 @@ export default function App() {
                 </div>
                 <div className="flex items-center justify-between sm:justify-end gap-6 flex-shrink-0">
                   <span className="text-sm sm:text-base font-semibold font-mono text-brand-gold">{item.price} €</span>
-                  <a 
-                    href="#rezervacija" 
-                    className="text-xs uppercase tracking-wider font-bold text-brand-espresso/60 hover:text-brand-gold transition-colors"
+                  
+                  {/*button koji okida handleQuickBook */}
+                  <button 
+                    onClick={() => handleQuickBook(servicesData[activeTab].category, item.name)}
+                    className="text-xs uppercase tracking-wider font-bold text-brand-espresso/60 hover:text-brand-gold transition-colors cursor-pointer"
                   >
                     Rezerviraj →
-                  </a>
+                  </button>
                 </div>
               </div>
             ))}
@@ -253,7 +262,12 @@ export default function App() {
 
       {/* BOOKING SUSTAV */}
       <div id="rezervacija" className="bg-brand-clay py-8 border-t border-brand-sand/60">
-        <BookingSystem servicesData={servicesData} />
+        {/* Prosljeđuje preselect vrijednosti u komponentu */}
+        <BookingSystem 
+          servicesData={servicesData} 
+          initialCategory={preselectedCategory}
+          initialItem={preselectedItem}
+        />
       </div>
 
       {/* FOOTER */}

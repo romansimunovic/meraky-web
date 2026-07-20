@@ -1,15 +1,40 @@
 import React, { useState, useEffect } from 'react';
 
-export default function BookingSystem({ servicesData = [] }) {
+export default function BookingSystem({ servicesData = [], initialCategory, initialItem }) {
   const [step, setStep] = useState(1); 
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // 1. Mapiranje svih usluga u ravan niz kako bismo ih lakše pretraživali
+  const allServices = servicesData.flatMap(cat => 
+    cat.items.map(item => ({
+      name: item.name,
+      category: cat.category,
+      price: item.price,
+      duration: item.duration || "45 min"
+    }))
+  );
+
+  // 2. Sinkronizacija stanja kada klijent klikne "Rezerviraj →" na vrhu stranice
+  useEffect(() => {
+    if (initialCategory && initialItem) {
+      // Pronalazimo točan servis koji se podudara s imenom i kategorijom
+      const foundService = allServices.find(
+        s => s.name === initialItem && s.category === initialCategory
+      );
+
+      if (foundService) {
+        setSelectedService(foundService);
+        setStep(2); // Odmah preskačemo korak 1 i šaljemo klijenta na kalendar (korak 2)
+      }
+    }
+  }, [initialCategory, initialItem, servicesData]); // Dodan servicesData kao dependency radi sigurnosti učitavanja
+
   // Podaci o klijentu i validacija
   const [clientData, setClientData] = useState({ name: "", phone: "", email: "", note: "" });
-  const [touched, setTouched] = useState({ name: false, phone: false, email: false });
+  const [touched, setTouched] = useState({ name: false, phone: false, email: false, note: false });
 
   // Regex pravila
   const nameRegex = /^[A-Za-zČĆŽŠĐčćžšđ\s'-]{2,50}$/;
@@ -23,15 +48,6 @@ export default function BookingSystem({ servicesData = [] }) {
   const isNoteValid = clientData.note.length <= 300;
 
   const isFormValid = isNameValid && isPhoneValid && isEmailValid && isNoteValid;
-
-  const allServices = servicesData.flatMap(cat => 
-    cat.items.map(item => ({
-      name: item.name,
-      category: cat.category,
-      price: item.price,
-      duration: item.duration || "45 min"
-    }))
-  );
 
   const getNextWorkingDays = () => {
     const days = [];
