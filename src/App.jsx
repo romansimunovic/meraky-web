@@ -265,13 +265,14 @@ export default function App() {
             {/* 1. Vertikalni Video (720x1280) */}
             <div className="relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm bg-brand-clay/20 aspect-[9/16] w-full">
               <video
-                src="/images/demonstracija.mp4"
-                autoPlay
-                loop
-                muted
-                playsInline
-                className="w-full h-full object-cover pointer-events-none"
-              />
+  src="/images/demonstracija.mp4"
+  autoPlay={true}
+  loop={true}
+  muted={true}
+  playsInline={true}
+  controls={false}
+  className="w-full h-full object-cover pointer-events-none"
+/>
               <div className="absolute inset-0 bg-brand-espresso/5 pointer-events-none"></div>
               <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-xl border border-brand-sand/40">
                 <p className="text-xs uppercase tracking-widest font-bold text-brand-espresso">Holistički pristup</p>
