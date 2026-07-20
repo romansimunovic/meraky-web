@@ -144,11 +144,11 @@ export default function App() {
               Usluge
             </a>
             <a 
-              href="#o-salonu" 
+              href="#nas-rad" 
               onClick={() => setMobileMenuOpen(false)}
               className="block py-2 text-sm font-bold uppercase tracking-wider text-brand-espresso hover:text-brand-gold"
             >
-              O nama
+              Naš rad
             </a>
             <a 
               href="#kontakt" 
