@@ -95,26 +95,25 @@ function ServiceCard({ service, selected, onClick }) {
     <button
       type="button"
       onClick={() => onClick(service)}
-      className={`w-full rounded-2xl border p-4 text-left transition-all group snap-start ${
+      className={`w-full rounded-2xl border px-3 py-3 sm:px-4 sm:py-3.5 text-left transition-all group snap-start ${
         selected
           ? "border-[#B89565] bg-[#FCFAF7] shadow-sm"
           : "border-[#E8E2D7] bg-white hover:border-[#B89565]/60 hover:bg-[#FCFAF7]"
       }`}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className="flex items-center justify-between gap-3">
         <div className="min-w-0 flex-1">
-          <p className="font-semibold text-[#2B231F] group-hover:text-[#B89565] transition-colors">
+          <p className="text-[15px] sm:text-base font-semibold text-[#2B231F] leading-tight truncate group-hover:text-[#B89565]">
             {service.name}
           </p>
-          <p className="mt-1 text-xs uppercase tracking-wider text-[#2B231F]/55 font-semibold truncate">
-            {service.category} • {service.duration}
-          </p>
         </div>
-        <div className="text-right flex-shrink-0">
-          <p className="font-bold font-mono text-[#B89565]">{service.price} €</p>
-          <span className="hidden sm:inline-block mt-1 text-[10px] font-bold uppercase tracking-wider text-[#B89565] opacity-0 group-hover:opacity-100 transition-opacity">
-            Odaberi →
-          </span>
+        <div className="flex-shrink-0 text-right">
+          <p className="text-sm sm:text-base font-bold font-mono text-[#B89565]">
+            {service.price} €
+          </p>
+          <p className="text-[10px] sm:text-[11px] text-[#2B231F]/45 font-medium mt-0.5">
+            {service.duration}
+          </p>
         </div>
       </div>
     </button>
@@ -332,7 +331,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             </div>
           )}
 
-          <div className="relative flex-1 min-h-0 overflow-hidden p-4 sm:p-8">
+          <div className="relative flex-1 min-h-0 overflow-hidden p-4 sm:p-8 flex flex-col">
             {isSubmitting && (
               <div className="absolute inset-0 z-50 bg-white/90 flex flex-col items-center justify-center gap-4">
                 <div className="w-12 h-12 border-4 border-[#B89565] border-t-transparent rounded-full animate-spin" />
@@ -353,21 +352,27 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </p>
                 </div>
 
-                <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-5 scroll-smooth overscroll-contain [scrollbar-width:thin] [scrollbar-color:#B89565_#F3ECE3]">
+                <div
+                  className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-4 sm:space-y-5 scroll-smooth overscroll-contain touch-pan-y [scrollbar-width:thin] [scrollbar-color:#B89565_#F3ECE3]"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                >
                   {groupedServices.map((group) => (
-                    <section key={group.category} className="space-y-3">
-                      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur py-2">
+                    <section key={group.category} className="space-y-2 sm:space-y-3">
+                      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur py-1">
                         <h5 className="text-[10px] uppercase tracking-[0.25em] font-bold text-[#2B231F]/50">
                           {group.category}
                         </h5>
                       </div>
 
-                      <div className="grid gap-3 sm:grid-cols-2">
+                      <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
                         {group.items.map((service, index) => (
                           <ServiceCard
                             key={`${service.name}-${index}`}
                             service={service}
-                            selected={selectedService?.name === service.name && selectedService?.category === service.category}
+                            selected={
+                              selectedService?.name === service.name &&
+                              selectedService?.category === service.category
+                            }
                             onClick={handleServiceSelect}
                           />
                         ))}
@@ -398,7 +403,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                 </div>
 
                 <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] flex-1 min-h-0">
-                  <div className="space-y-5 min-h-0 overflow-y-auto pr-1 overscroll-contain">
+                  <div className="space-y-5 min-h-0 overflow-y-auto pr-1 overscroll-contain touch-pan-y" style={{ WebkitOverflowScrolling: "touch" }}>
                     <div>
                       <label className="block text-[10px] uppercase tracking-wider mb-3 font-bold text-[#2B231F]/60">
                         Dostupni datumi
@@ -504,7 +509,11 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </button>
                 </div>
 
-                <form className="flex-1 min-h-0 overflow-y-auto pr-1 overscroll-contain space-y-4" onSubmit={handleSubmitBooking}>
+                <form
+                  className="flex-1 min-h-0 overflow-y-auto pr-1 overscroll-contain space-y-4 touch-pan-y"
+                  style={{ WebkitOverflowScrolling: "touch" }}
+                  onSubmit={handleSubmitBooking}
+                >
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field
                       label="Ime i prezime"
@@ -583,7 +592,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             )}
 
             {step === 4 && (
-              <div className="animate-booking-step text-center py-2 space-y-6 flex-1 min-h-0 overflow-y-auto overscroll-contain">
+              <div className="animate-booking-step text-center py-2 space-y-6 flex-1 min-h-0 overflow-y-auto overscroll-contain touch-pan-y" style={{ WebkitOverflowScrolling: "touch" }}>
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 sm:w-6 sm:h-6">
                     <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -639,7 +648,9 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                 </div>
 
                 <div className="max-w-md mx-auto pt-2 space-y-2">
-                  <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">Spremi termin u kalendar</p>
+                  <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">
+                    Spremi termin u kalendar
+                  </p>
                   <div className="grid grid-cols-3 gap-2">
                     <a href={googleUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center p-2 rounded-xl border border-[#E8E2D7] bg-white hover:border-[#B89565] transition-all text-[10px] font-bold text-[#2B231F]">
                       Google
