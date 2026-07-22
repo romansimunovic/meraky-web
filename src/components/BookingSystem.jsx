@@ -462,31 +462,8 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                       )}
                     </div>
                   </div>
-
-                  <aside className="rounded-2xl border border-[#E8E2D7] bg-[#FCFAF7] p-4 sm:p-5 h-fit lg:sticky lg:top-4">
-                    <p className="text-[10px] uppercase tracking-widest font-bold text-[#2B231F]/50">
-                      Sažetak odabira
-                    </p>
-                    <div className="mt-4 space-y-3 text-sm">
-                      <div>
-                        <p className="text-[#2B231F]/45 text-[10px] uppercase tracking-wider font-bold">Usluga</p>
-                        <p className="font-semibold text-[#2B231F]">{selectedService?.name || "—"}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#2B231F]/45 text-[10px] uppercase tracking-wider font-bold">Datum</p>
-                        <p className="font-semibold text-[#2B231F]">{formatSelectedDate(selectedDate) || "—"}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#2B231F]/45 text-[10px] uppercase tracking-wider font-bold">Vrijeme</p>
-                        <p className="font-semibold text-[#2B231F]">{selectedTime ? `${selectedTime} h` : "—"}</p>
-                      </div>
-                      <div>
-                        <p className="text-[#2B231F]/45 text-[10px] uppercase tracking-wider font-bold">Trajanje</p>
-                        <p className="font-semibold text-[#2B231F]">{selectedService?.duration || "45 min"}</p>
-                      </div>
-                    </div>
-                  </aside>
-                </div>
+                  </div>
+      
               </div>
             )}
 
