@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-@import "tailwindcss"; /* Ključno za Tailwind v4! */
+@import "tailwindcss"; /* za Tailwind v4! */
 
 /* ==========================================================================
    TAILWIND v4 CONFIGURATION (DIZAJNERSKI TOKENI)
@@ -11,7 +11,7 @@
   --font-sans-clean: 'Plus Jakarta Sans', sans-serif;
 
   /* Službena paleta boja brenda za lakše održavanje i konzistentnost */
-  --color-brand-cream: #FCFAF7;       /* Primarna luksuzna svijetla pozadina */
+  --color-brand-cream: #FCFAF7;      /* Primarna luksuzna svijetla pozadina */
   --color-brand-espresso: #2B231F;    /* Glavna tamna boja za tekst, gumbe i kontraste */
   --color-brand-gold: #B89565;        /* Premium zlatni detalji i akcenti */
   --color-brand-sand: #E8E2D7;        /* Profinjene tanke linije i rubovi */
@@ -19,12 +19,12 @@
   --color-brand-moss: #E5DEC9;        /* Nježna boja za selekciju teksta */
 
   /* Glatke i prirodne animacije */
-  --animate-fade-in: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-in: fadeIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 
   @keyframes fadeIn {
     from {
       opacity: 0;
-      transform: translateY(12px);
+      transform: translateY(10px);
     }
     to {
       opacity: 1;
@@ -37,7 +37,8 @@
    GLOBALNI BAZNI STILOVI (GLOBAL RESET & DEFAULTS)
    ========================================================================== */
 html {
-  scroll-behavior: smooth; /* Omogućuje luksuzni, spori scroll do sekcija umjesto naglog skoka */
+  scroll-behavior: smooth; /* Luksuzni, spori prelazak do sekcija */
+  -webkit-text-size-adjust: 100%; /* Sprječava neželjeno skaliranje fontova na mobitelima */
 }
 
 /* Globalno usklađena selekcija teksta na cijeloj stranici */
@@ -51,25 +52,33 @@ body {
   background-color: var(--color-brand-cream);
   color: var(--color-brand-espresso);
   overflow-x: hidden;
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Fokus stilovi visoke pristupačnosti (A11y) umjesto agresivnog browseroutline-a */
+:focus-visible {
+  outline: 2px solid var(--color-brand-gold);
+  outline-offset: 3px;
+}
+
 /* ==========================================================================
-   FORM CONTROLS (Usklađivanje inputa za rezervacijski sustav)
+   FORM CONTROLS (Optimizacija za rezervacijski sustav i unose)
    ========================================================================== */
 input, select, textarea {
-  transition: all 0.25s ease-in-out !important;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  appearance: none; /* Uklanja zadani nativni stil traka na mobilnim uređajima */
 }
 
 /* Premium fokus efekt na svim poljima za unos */
 input:focus, select:focus, textarea:focus {
   outline: none !important;
   border-color: var(--color-brand-gold) !important;
-  box-shadow: 0 0 0 3px rgba(184, 149, 101, 0.15) !important;
+  box-shadow: 0 0 0 3px rgba(184, 149, 101, 0.18) !important;
 }
 
-/* Sprječavanje iOS automatskog zumiranja na mobilnim uređajima */
+/* Sprječavanje iOS automatskog zumiranja na mobilnim uređajima (font mora biti min 16px) */
 @media screen and (max-width: 768px) {
   input, select, textarea {
     font-size: 16px !important;
@@ -77,7 +86,7 @@ input:focus, select:focus, textarea:focus {
 }
 
 /* ==========================================================================
-   CUSTOM UTILITY CLASSES (Korisne klase)
+   CUSTOM UTILITY CLASSES (Korisne klase za UX)
    ========================================================================== */
 
 /* Sakrivanje scrollbara na horizontalnim elementima (npr. tabovi usluga na mobitelu) */
@@ -100,4 +109,10 @@ input:focus, select:focus, textarea:focus {
     radial-gradient(circle at 50% 50%, rgba(184, 149, 101, 0.07) 1px, transparent 1px),
     radial-gradient(circle at 0 0, rgba(184, 149, 101, 0.04) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+/* Osiguranje minimalne visine za dodirne elemente na mobitelima (UX standard) */
+@utility touch-target {
+  min-height: 44px;
+  min-width: 44px;
 }
