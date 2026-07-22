@@ -1,16 +1,43 @@
-# React + Vite
+# Meraky Web – Salon za njegu i estetiku
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Moderno, brzo i responzivno web rješenje razvijeno za salon ljepote **Meraky**, s naglaskom na vrhunski korisnički doživljaj (UX/UI), luksuznu estetiku i besprijekoran rad na svim uređajima.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tehnologije
 
-## React Compiler
+Projekt je izrađen korištenjem modernog i brzog web stoga:
+* **React** – Suvremena biblioteka za izgradnju korisničkog sučelja.
+* **Vite** – Ultrabrzi alat za razvoj i pakiranje aplikacije.
+* **Tailwind CSS v4** – Ubrzani stilski sustav prilagođen kroz napredne dizajnerske tokene (boje brenda, tipografiju i animacije).
+* **Oxlint** – Brzi linter za održavanje čistoće i visoke kvalitete koda.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## Pokretanje projekta (Lokalni razvoj)
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+Za pokretanje aplikacije na vašem računalu, slijedite ove korake:
+
+1. **Instalacija paketa:**
+   ```bash
+   npm install
+
+```
+
+2. **Pokretanje razvojnog poslužitelja (Development server):**
+```bash
+npm run dev
+
+```
+
+
+3. **Izrada produkcijske verzije (Build):**
+```bash
+npm run build
+
+```
+## Ključne značajke dizajna
+
+* **Butik vizualni identitet:** Pažljivo birana paleta boja (krem pozadina, espresso tekst, zlatni akcenti) i elegantna tipografija (*Cormorant Garamond* i *Plus Jakarta Sans*).
+* **Optimizirana galerija i prikaz radova:** Oštre i jasne fotografije s fluidnim interaktivnim efektima bez suvišnog mutljenja.
+* **Pristupačnost i responzivnost:** Prilagođeno mobilnim uređajima, tabletima i stolnim računalima uz poštivanje modernih standarda pristupačnosti (A11y).
