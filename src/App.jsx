@@ -258,20 +258,20 @@ export default function App() {
             </p>
           </div>
 
-          {/* Grid raspored: Na mobitelu jedno ispod drugog (col-1), na webu jedno pored drugog (md:grid-cols-3) */}
+          {/* Grid raspored */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch max-w-md mx-auto md:max-w-none">
             
-            {/* 1. Vertikalni Video (720x1280) */}
+            {/* 1. Vertikalni Video (Netaknuto) */}
             <div className="relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm bg-brand-clay/20 aspect-[9/16] w-full">
               <video
-  src="/images/demonstracija.mp4"
-  autoPlay={true}
-  loop={true}
-  muted={true}
-  playsInline={true}
-  controls={false}
-  className="w-full h-full object-cover pointer-events-none"
-/>
+                src="/images/demonstracija.mp4"
+                autoPlay={true}
+                loop={true}
+                muted={true}
+                playsInline={true}
+                controls={false}
+                className="w-full h-full object-cover pointer-events-none"
+              />
               <div className="absolute inset-0 bg-brand-espresso/5 pointer-events-none"></div>
               <div className="absolute bottom-6 left-6 right-6 bg-white/90 backdrop-blur-md p-4 rounded-xl border border-brand-sand/40">
                 <p className="text-xs uppercase tracking-widest font-bold text-brand-espresso">Holistički pristup</p>
@@ -280,84 +280,56 @@ export default function App() {
             </div>
 
             {/* 2. Kartica: Tretman lica */}
-            <div 
-              onClick={() => toggleCard('tretmani')}
-              className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full cursor-pointer bg-brand-espresso text-white select-none"
-            >
+            <div className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full bg-brand-espresso text-white select-none">
+              
+              {/* Slika s laganim zoom efektom na hover/dodir, uvijek potpuno oštra */}
               <img 
                 src="/images/tretmanlica.jpg" 
                 alt="Tretman lica u Meraky salonu" 
-                className={`w-full h-full object-cover transition-all duration-500 ${
-                  revealedCard === 'tretmani' ? 'scale-105 blur-sm' : 'md:group-hover:scale-105 md:group-hover:blur-sm'
-                }`}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               
-              {/* Crni veo / Overlay */}
-              <div className={`absolute inset-0 bg-gradient-to-t from-brand-espresso/90 via-brand-espresso/40 to-brand-espresso/20 transition-opacity duration-500 ${
-                revealedCard === 'tretmani' ? 'opacity-95' : 'opacity-40 md:group-hover:opacity-95'
-              }`}></div>
+              {/* Tamni gradijent na dnu da tekst bude savršeno čitljiv preko slike */}
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/95 via-brand-espresso/30 to-transparent"></div>
               
-              {/* Sadržaj i tekst */}
+              {/* Stalni sadržaj i opis na dnu */}
               <div className="absolute inset-0 flex flex-col justify-end p-6">
-                <span className={`text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1 transition-all duration-500 ${
-                  revealedCard === 'tretmani' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0'
-                }`}>
+                <span className="text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1">
                   Njega Kože
                 </span>
                 <h4 className="font-serif-elegant text-2xl font-light text-white mb-2">
                   Tretmani lica
                 </h4>
-                <p className={`text-xs text-brand-cream/90 transition-all duration-500 leading-relaxed ${
-                  revealedCard === 'tretmani' ? 'opacity-100 translate-y-0 h-auto mt-1' : 'opacity-0 translate-y-4 h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:h-auto md:group-hover:mt-1'
-                }`}>
+                <p className="text-xs text-brand-cream/90 leading-relaxed">
                   Dubinska analiza, hidratacija i napredni dermatološki protokoli prilagođeni vašem tipu kože uz vrhunsku premium kozmetiku.
                 </p>
-                
-                {/* Indikator za klik na mobitelu kad je zatvoreno */}
-                {revealedCard !== 'tretmani' && (
-                  <span className="text-[10px] text-brand-cream/50 mt-2 block md:hidden">Dodirnite za detalje →</span>
-                )}
               </div>
             </div>
 
             {/* 3. Kartica: Oblikovanje obrva */}
-            <div 
-              onClick={() => toggleCard('obrve')}
-              className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full cursor-pointer bg-brand-espresso text-white select-none"
-            >
+            <div className="group relative overflow-hidden rounded-3xl border border-brand-sand shadow-sm aspect-[9/16] w-full bg-brand-espresso text-white select-none">
+              
+              {/* Slika s laganim zoom efektom na hover/dodir, uvijek potpuno oštra */}
               <img 
                 src="/images/obrve.jpg" 
                 alt="Oblikovanje obrva u Meraky salonu" 
-                className={`w-full h-full object-cover transition-all duration-500 ${
-                  revealedCard === 'obrve' ? 'scale-105 blur-sm' : 'md:group-hover:scale-105 md:group-hover:blur-sm'
-                }`}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
               
-              {/* Crni veo / Overlay */}
-              <div className={`absolute inset-0 bg-gradient-to-t from-brand-espresso/90 via-brand-espresso/40 to-brand-espresso/20 transition-opacity duration-500 ${
-                revealedCard === 'obrve' ? 'opacity-95' : 'opacity-40 md:group-hover:opacity-95'
-              }`}></div>
+              {/* Tamni gradijent na dnu */}
+              <div className="absolute inset-0 bg-gradient-to-t from-brand-espresso/95 via-brand-espresso/30 to-transparent"></div>
               
-              {/* Sadržaj i tekst */}
+              {/* Stalni sadržaj i opis na dnu */}
               <div className="absolute inset-0 flex flex-col justify-end p-6">
-                <span className={`text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1 transition-all duration-500 ${
-                  revealedCard === 'obrve' ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-2 md:group-hover:opacity-100 md:group-hover:translate-y-0'
-                }`}>
+                <span className="text-[10px] uppercase tracking-widest text-brand-gold font-bold mb-1">
                   Estetika
                 </span>
                 <h4 className="font-serif-elegant text-2xl font-light text-white mb-2">
                   Oblikovanje obrva
                 </h4>
-                <p className={`text-xs text-brand-cream/90 transition-all duration-500 leading-relaxed ${
-                  revealedCard === 'obrve' ? 'opacity-100 translate-y-0 h-auto mt-1' : 'opacity-0 translate-y-4 h-0 overflow-hidden md:group-hover:opacity-100 md:group-hover:translate-y-0 md:group-hover:h-auto md:group-hover:mt-1'
-                }`}>
+                <p className="text-xs text-brand-cream/90 leading-relaxed">
                   Precizna definicija luka i bojanje koje naglašava prirodnu ljepotu vaših očiju i sklad cijelog lica.
                 </p>
-                
-                {/* Indikator za klik na mobitelu kad je zatvoreno */}
-                {revealedCard !== 'obrve' && (
-                  <span className="text-[10px] text-brand-cream/50 mt-2 block md:hidden">Dodirnite za detalje →</span>
-                )}
               </div>
             </div>
 
