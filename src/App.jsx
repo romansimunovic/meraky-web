@@ -373,17 +373,18 @@ export default function App() {
               <h5 className="text-xs uppercase tracking-widest font-bold text-brand-gold">Lokacija i Kontakt</h5>
               <div className="space-y-1.5 text-sm text-brand-cream/90 flex flex-col items-center sm:items-start md:items-start">
                 <p>Krbavska ulica 15, 31000 Osijek</p>
-                <a 
+               <a 
                   href="tel:+385992781199" 
-                  className="hover:text-brand-gold transition-colors duration-200"
+                  className="hover:text-brand-gold transition-colors duration-200 font-medium inline-flex items-center gap-1.5"
                 >
-                  Telefon: 099 278 1199
+                  099 278 1199
                 </a>
+
                 <a 
                   href="mailto:merakycare@gmail.com" 
-                  className="hover:text-brand-gold transition-colors duration-200"
+                  className="hover:text-brand-gold transition-colors duration-200 font-medium underline underline-offset-4 decoration-brand-gold/40 hover:decoration-brand-gold"
                 >
-                  E-mail: merakycare@gmail.com
+                  merakycare@gmail.com
                 </a>
               </div>
             </div>
