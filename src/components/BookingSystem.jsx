@@ -95,7 +95,7 @@ function ServiceCard({ service, selected, onClick }) {
     <button
       type="button"
       onClick={() => onClick(service)}
-      className={`w-full rounded-2xl border p-4 text-left transition-all group ${
+      className={`w-full rounded-2xl border p-4 text-left transition-all group snap-start ${
         selected
           ? "border-[#B89565] bg-[#FCFAF7] shadow-sm"
           : "border-[#E8E2D7] bg-white hover:border-[#B89565]/60 hover:bg-[#FCFAF7]"
@@ -158,26 +158,55 @@ function TimeChip({ time, selected, onClick }) {
   );
 }
 
+function Field({
+  label,
+  type,
+  placeholder,
+  value,
+  onChange,
+  onBlur,
+  touched,
+  valid,
+  successText,
+  errorText,
+}) {
+  return (
+    <div>
+      <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">
+        {label}
+      </label>
+      <input
+        type={type}
+        required
+        placeholder={placeholder}
+        className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
+          touched
+            ? valid
+              ? "border-emerald-500 focus:ring-1 focus:ring-emerald-500"
+              : "border-red-500 focus:ring-1 focus:ring-red-500"
+            : "border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]"
+        }`}
+        value={value}
+        onBlur={onBlur}
+        onChange={(e) => onChange(e.target.value)}
+      />
+      {touched && (
+        <p className={`text-[11px] mt-1 font-semibold ${valid ? "text-emerald-600" : "text-red-500"}`}>
+          {valid ? `✓ ${successText}` : `❌ ${errorText}`}
+        </p>
+      )}
+    </div>
+  );
+}
+
 export default function BookingSystem({ servicesData = [], initialCategory, initialItem }) {
   const [step, setStep] = useState(1);
   const [selectedService, setSelectedService] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
   const [selectedTime, setSelectedTime] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const [clientData, setClientData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    note: "",
-  });
-
-  const [touched, setTouched] = useState({
-    name: false,
-    phone: false,
-    email: false,
-    note: false,
-  });
+  const [clientData, setClientData] = useState({ name: "", phone: "", email: "", note: "" });
+  const [touched, setTouched] = useState({ name: false, phone: false, email: false, note: false });
 
   const allServices = useMemo(
     () =>
@@ -192,19 +221,21 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
     [servicesData]
   );
 
-  const groupedServices = useMemo(() => {
-    return servicesData
-      .map((cat) => ({
-        category: cat.category,
-        items: (cat.items || []).map((item) => ({
-          name: item.name,
+  const groupedServices = useMemo(
+    () =>
+      servicesData
+        .map((cat) => ({
           category: cat.category,
-          price: item.price,
-          duration: item.duration || "45 min",
-        })),
-      }))
-      .filter((cat) => cat.items.length > 0);
-  }, [servicesData]);
+          items: (cat.items || []).map((item) => ({
+            name: item.name,
+            category: cat.category,
+            price: item.price,
+            duration: item.duration || "45 min",
+          })),
+        }))
+        .filter((cat) => cat.items.length > 0),
+    [servicesData]
+  );
 
   const availableDays = useMemo(() => getNextWorkingDays(), []);
 
@@ -213,7 +244,6 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
       const foundService = allServices.find(
         (s) => s.name === initialItem && s.category === initialCategory
       );
-
       if (foundService) {
         setSelectedService(foundService);
         setStep(2);
@@ -244,7 +274,6 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
   const handleSubmitBooking = (e) => {
     e.preventDefault();
     if (!isFormValid) return;
-
     setIsSubmitting(true);
     setTimeout(() => {
       setIsSubmitting(false);
@@ -269,7 +298,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
   };
 
   return (
-    <section id="rezervacija" className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-8 sm:py-12 relative z-10">
+    <section id="rezervacija" className="w-full max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-10 relative z-10">
       <style>{`
         @keyframes bookingFadeIn {
           0% { opacity: 0; transform: translateY(8px) scale(0.99); }
@@ -280,33 +309,22 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
         }
       `}</style>
 
-      <div className="w-full rounded-3xl bg-[#F3ECE3]/60 border border-[#E8E2D7] p-4 sm:p-8 md:p-10">
-        <div className="w-full rounded-3xl bg-white border border-[#E8E2D7] shadow-sm overflow-hidden">
+      <div className="w-full rounded-[2rem] bg-[#F3ECE3]/60 border border-[#E8E2D7] p-3 sm:p-6 md:p-8">
+        <div className="w-full rounded-[2rem] bg-white border border-[#E8E2D7] shadow-sm overflow-hidden flex flex-col h-[min(86dvh,860px)]">
           {step < 4 && (
-            <div className="bg-[#FCFAF7] border-b border-[#E8E2D7] px-4 sm:px-6 py-4">
-              <div className="flex items-center gap-3 text-[10px] sm:text-xs uppercase tracking-wider font-bold text-[#2B231F]/45">
-                <button
-                  onClick={() => setStep(1)}
-                  className={`flex items-center gap-1.5 ${step >= 1 ? "text-[#B89565]" : ""}`}
-                >
+            <div className="sticky top-0 z-20 bg-[#FCFAF7]/95 backdrop-blur border-b border-[#E8E2D7] px-4 sm:px-6 py-4 shrink-0">
+              <div className="flex items-center gap-3 text-[10px] sm:text-xs uppercase tracking-wider font-bold text-[#2B231F]/45 overflow-x-auto whitespace-nowrap [-ms-overflow-style:none] [scrollbar-width:none]">
+                <button onClick={() => setStep(1)} className={`flex items-center gap-1.5 ${step >= 1 ? "text-[#B89565]" : ""}`}>
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center border ${step >= 1 ? "border-[#B89565] bg-[#F3ECE3]" : "border-neutral-200"}`}>1</span>
                   Usluga
                 </button>
-                <div className="h-px bg-[#E8E2D7] flex-1" />
-                <button
-                  onClick={() => selectedService && setStep(2)}
-                  disabled={!selectedService}
-                  className={`flex items-center gap-1.5 disabled:opacity-40 ${step >= 2 ? "text-[#B89565]" : ""}`}
-                >
+                <div className="h-px bg-[#E8E2D7] flex-1 min-w-6" />
+                <button onClick={() => selectedService && setStep(2)} disabled={!selectedService} className={`flex items-center gap-1.5 disabled:opacity-40 ${step >= 2 ? "text-[#B89565]" : ""}`}>
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center border ${step >= 2 ? "border-[#B89565] bg-[#F3ECE3]" : "border-neutral-200"}`}>2</span>
                   Vrijeme
                 </button>
-                <div className="h-px bg-[#E8E2D7] flex-1" />
-                <button
-                  onClick={() => selectedTime && setStep(3)}
-                  disabled={!selectedTime}
-                  className={`flex items-center gap-1.5 disabled:opacity-40 ${step >= 3 ? "text-[#B89565]" : ""}`}
-                >
+                <div className="h-px bg-[#E8E2D7] flex-1 min-w-6" />
+                <button onClick={() => selectedTime && setStep(3)} disabled={!selectedTime} className={`flex items-center gap-1.5 disabled:opacity-40 ${step >= 3 ? "text-[#B89565]" : ""}`}>
                   <span className={`w-6 h-6 rounded-full flex items-center justify-center border ${step >= 3 ? "border-[#B89565] bg-[#F3ECE3]" : "border-neutral-200"}`}>3</span>
                   Podaci
                 </button>
@@ -314,7 +332,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             </div>
           )}
 
-          <div className="relative p-4 sm:p-8 min-h-[420px]">
+          <div className="relative flex-1 min-h-0 overflow-hidden p-4 sm:p-8">
             {isSubmitting && (
               <div className="absolute inset-0 z-50 bg-white/90 flex flex-col items-center justify-center gap-4">
                 <div className="w-12 h-12 border-4 border-[#B89565] border-t-transparent rounded-full animate-spin" />
@@ -325,8 +343,8 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             )}
 
             {step === 1 && (
-              <div className="animate-booking-step space-y-5">
-                <div className="flex flex-col gap-2">
+              <div className="animate-booking-step h-full min-h-0 flex flex-col gap-5">
+                <div className="flex flex-col gap-2 shrink-0">
                   <h4 className="font-serif-elegant text-2xl sm:text-3xl font-medium text-[#2B231F]">
                     Rezerviraj svoj termin
                   </h4>
@@ -335,11 +353,11 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </p>
                 </div>
 
-                <div className="max-h-[520px] overflow-y-auto pr-1 space-y-5 scroll-smooth [scrollbar-width:thin] [scrollbar-color:#B89565_#F3ECE3]">
+                <div className="flex-1 min-h-0 overflow-y-auto pr-1 space-y-5 scroll-smooth overscroll-contain [scrollbar-width:thin] [scrollbar-color:#B89565_#F3ECE3]">
                   {groupedServices.map((group) => (
-                    <div key={group.category} className="space-y-3">
-                      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur px-1 py-2">
-                        <h5 className="text-[10px] uppercase tracking-[0.2em] font-bold text-[#2B231F]/50">
+                    <section key={group.category} className="space-y-3">
+                      <div className="sticky top-0 z-10 bg-white/95 backdrop-blur py-2">
+                        <h5 className="text-[10px] uppercase tracking-[0.25em] font-bold text-[#2B231F]/50">
                           {group.category}
                         </h5>
                       </div>
@@ -354,15 +372,15 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                           />
                         ))}
                       </div>
-                    </div>
+                    </section>
                   ))}
                 </div>
               </div>
             )}
 
             {step === 2 && (
-              <div className="animate-booking-step space-y-6">
-                <div className="flex items-start justify-between gap-4 border-b border-[#FAF7F2] pb-4">
+              <div className="animate-booking-step h-full min-h-0 flex flex-col gap-6">
+                <div className="flex items-start justify-between gap-4 border-b border-[#FAF7F2] pb-4 shrink-0">
                   <div>
                     <h4 className="font-serif-elegant text-2xl sm:text-3xl font-medium text-[#2B231F]">
                       Odaberi termin
@@ -379,8 +397,8 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </button>
                 </div>
 
-                <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr]">
-                  <div className="space-y-5">
+                <div className="grid gap-5 lg:grid-cols-[1.2fr_0.8fr] flex-1 min-h-0">
+                  <div className="space-y-5 min-h-0 overflow-y-auto pr-1 overscroll-contain">
                     <div>
                       <label className="block text-[10px] uppercase tracking-wider mb-3 font-bold text-[#2B231F]/60">
                         Dostupni datumi
@@ -440,7 +458,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                     </div>
                   </div>
 
-                  <aside className="rounded-2xl border border-[#E8E2D7] bg-[#FCFAF7] p-4 sm:p-5 h-fit">
+                  <aside className="rounded-2xl border border-[#E8E2D7] bg-[#FCFAF7] p-4 sm:p-5 h-fit lg:sticky lg:top-4">
                     <p className="text-[10px] uppercase tracking-widest font-bold text-[#2B231F]/50">
                       Sažetak odabira
                     </p>
@@ -468,8 +486,8 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             )}
 
             {step === 3 && (
-              <div className="animate-booking-step space-y-6">
-                <div className="flex items-start justify-between gap-4 border-b border-[#FAF7F2] pb-4">
+              <div className="animate-booking-step h-full min-h-0 flex flex-col gap-6">
+                <div className="flex items-start justify-between gap-4 border-b border-[#FAF7F2] pb-4 shrink-0">
                   <div>
                     <h4 className="font-serif-elegant text-2xl sm:text-3xl font-medium text-[#2B231F]">
                       Kontakt podaci
@@ -486,7 +504,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </button>
                 </div>
 
-                <form onSubmit={handleSubmitBooking} className="space-y-4">
+                <form className="flex-1 min-h-0 overflow-y-auto pr-1 overscroll-contain space-y-4" onSubmit={handleSubmitBooking}>
                   <div className="grid gap-4 sm:grid-cols-2">
                     <Field
                       label="Ime i prezime"
@@ -500,7 +518,6 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                       successText="Ime izgleda dobro"
                       errorText="Unesite valjano ime"
                     />
-
                     <Field
                       label="Broj mobitela"
                       type="tel"
@@ -566,7 +583,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
             )}
 
             {step === 4 && (
-              <div className="animate-booking-step text-center py-2 space-y-6">
+              <div className="animate-booking-step text-center py-2 space-y-6 flex-1 min-h-0 overflow-y-auto overscroll-contain">
                 <div className="w-12 h-12 sm:w-14 sm:h-14 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto text-emerald-600">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-5 h-5 sm:w-6 sm:h-6">
                     <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
@@ -585,9 +602,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                 <div className="max-w-md mx-auto bg-[#FCFAF7] border-2 border-[#E5DEC9] rounded-2xl p-5 text-left space-y-4 shadow-sm">
                   <div className="border-b border-[#E5DEC9]/50 pb-3">
                     <p className="text-[9px] text-[#B89565] uppercase tracking-widest font-bold">Potvrda termina</p>
-                    <h5 className="font-serif-elegant text-base sm:text-lg text-[#2B231F] mt-0.5">
-                      {selectedService?.name}
-                    </h5>
+                    <h5 className="font-serif-elegant text-base sm:text-lg text-[#2B231F] mt-0.5">{selectedService?.name}</h5>
                   </div>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-[#2B231F]">
@@ -624,9 +639,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                 </div>
 
                 <div className="max-w-md mx-auto pt-2 space-y-2">
-                  <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">
-                    Spremi termin u kalendar
-                  </p>
+                  <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">Spremi termin u kalendar</p>
                   <div className="grid grid-cols-3 gap-2">
                     <a href={googleUrl} target="_blank" rel="noopener noreferrer" className="flex flex-col items-center justify-center p-2 rounded-xl border border-[#E8E2D7] bg-white hover:border-[#B89565] transition-all text-[10px] font-bold text-[#2B231F]">
                       Google
@@ -652,46 +665,5 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
         </div>
       </div>
     </section>
-  );
-}
-
-function Field({
-  label,
-  type,
-  placeholder,
-  value,
-  onChange,
-  onBlur,
-  touched,
-  valid,
-  successText,
-  errorText,
-}) {
-  return (
-    <div>
-      <label className="block text-[10px] uppercase tracking-wider mb-2 font-bold text-[#2B231F]/60">
-        {label}
-      </label>
-      <input
-        type={type}
-        required
-        placeholder={placeholder}
-        className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
-          touched
-            ? valid
-              ? "border-emerald-500 focus:ring-1 focus:ring-emerald-500"
-              : "border-red-500 focus:ring-1 focus:ring-red-500"
-            : "border-[#E8E2D7] focus:ring-1 focus:ring-[#B89565]"
-        }`}
-        value={value}
-        onBlur={onBlur}
-        onChange={(e) => onChange(e.target.value)}
-      />
-      {touched && (
-        <p className={`text-[11px] mt-1 font-semibold ${valid ? "text-emerald-600" : "text-red-500"}`}>
-          {valid ? `✓ ${successText}` : `❌ ${errorText}`}
-        </p>
-      )}
-    </div>
   );
 }
