@@ -1,100 +1,278 @@
 <!doctype html>
 <html lang="hr">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    
-    <!-- Primarni SEO Meta Tagovi -->
-    <title>Meraky Beauty & Care | Kozmetički salon Osijek</title>
-    <meta name="title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta name="description" content="Kozmetički salon Meraky u Osijeku nudi profesionalnu njegu lica, vrhunske masaže, pedikuru i depilaciju u luksuznom, opuštajućem ambijentu. Rezervirajte svoj termin." />
-    <meta name="keywords" content="kozmetički salon osijek, salon ljepote osijek, njega lica osijek, oblikovanje obrva osijek, pedikura osijek, depilacija osijek, masaža osijek, meraky osijek, krbavska ulica osijek, tretmani lica" />
-    <meta name="robots" content="index, follow, max-image-preview:large" />
-    <meta name="author" content="Roman Šimunović" />
-    <meta name="geo.region" content="HR-05" />
-    <meta name="geo.placename" content="Osijek" />
-    <meta name="geo.position" content="45.54997;18.68137" />
-    <meta name="ICBM" content="45.54997, 18.68137" />
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 
-    <!-- Open Graph / Facebook (Prikaz pri dijeljenju na mrežama) -->
-    <meta property="og:type" content="business.business" />
-    <meta property="og:url" content="https://meraky-web.netlify.app/" />
-    <meta property="og:title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta property="og:description" content="Otkrijte našu oazu opuštanja u Osijeku. Profesionalni tretmani lica, masaže i pedikura prilagođeni vašoj koži." />
-    <meta property="og:image" content="https://meraky-web.netlify.app/og-image.jpg" />
-    <meta property="business:contact_data:street_address" content="Krbavska ulica 15" />
-    <meta property="business:contact_data:locality" content="Osijek" />
-    <meta property="business:contact_data:postal_code" content="31000" />
-    <meta property="business:contact_data:country_name" content="Hrvatska" />
-    <meta property="business:contact_data:email" content="merakycare@gmail.com" />
-    <meta property="business:contact_data:phone_number" content="+385992781199" />
+  <!-- Responsive -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- Twitter Meta Tagovi -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://meraky-web.netlify.app/" />
-    <meta property="twitter:title" content="Meraky Beauty & Care | Kozmetički salon Osijek" />
-    <meta property="twitter:description" content="Profesionalni tretmani lica, premium njega stopala, masaže i oblikovanje obrva u Osijeku." />
-    <meta property="twitter:image" content="https://meraky-web.netlify.app/og-image.jpg" />
+  <!-- Primary SEO -->
+  <title>Meraky Beauty & Care | MERAKY obrt za kozmetičke usluge | Kozmetički salon Osijek</title>
 
-    <!-- Google Fonts Preconnect za brže učitavanje -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Montserrat:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+  <meta
+    name="description"
+    content="Meraky Beauty & Care u Osijeku pruža profesionalne tretmane lica, masaže, pedikuru, depilaciju, njegu obrva i kozmetičke tretmane u ugodnom i opuštajućem ambijentu. Posjetite nas u Krbavskoj ulici 15 i rezervirajte svoj termin."
+  />
 
-    <!-- JSON-LD Strukturirani podaci (Lokalni SEO za Google Maps i Rich Snippets) -->
-    <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "BeautySalon",
-        "name": "Meraky Beauty & Care",
-        "image": "https://meraky-web.netlify.app/images/logo_salona.png",
-        "@id": "https://meraky-web.netlify.app/#salon",
-        "url": "https://meraky-web.netlify.app/",
-        "telephone": "+385992781199",
-        "email": "merakycare@gmail.com",
-        "priceRange": "$$",
-        "address": {
-          "@type": "PostalAddress",
-          "streetAddress": "Krbavska ulica 15",
-          "addressLocality": "Osijek",
-          "postalCode": "31000",
-          "addressCountry": "HR"
-        },
-        "geo": {
-          "@type": "GeoCoordinates",
-          "latitude": 45.54997,
-          "longitude": 18.68137
-        },
-        "openingHoursSpecification": [
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": [
-              "Monday",
-              "Tuesday",
-              "Wednesday",
-              "Thursday",
-              "Friday"
-            ],
-            "opens": "08:00",
-            "closes": "20:00"
-          },
-          {
-            "@type": "OpeningHoursSpecification",
-            "dayOfWeek": "Saturday",
-            "opens": "08:00",
-            "closes": "14:00"
-          }
-        ],
-        "sameAs": [
-          "https://www.instagram.com/merakycare/",
-          "https://www.facebook.com/p/Meraky-Beauty-and-Care-100094700135644/"
-        ]
-      }
-    </script>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+  <meta
+    name="keywords"
+    content="kozmetički salon Osijek, salon ljepote Osijek, njega lica Osijek, masaža Osijek, pedikura Osijek, depilacija Osijek, kozmetički tretmani Osijek, Meraky Beauty & Care, Meraky Osijek, Krbavska 15"
+  />
+
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+
+  <meta name="author" content="Roman Šimunović" />
+
+  <meta name="theme-color" content="#d5c1a5" />
+  <meta name="color-scheme" content="light" />
+
+  <meta name="geo.region" content="HR-14" />
+  <meta name="geo.placename" content="Osijek" />
+  <meta name="geo.position" content="45.54997;18.68137" />
+  <meta name="ICBM" content="45.54997,18.68137" />
+
+  <link rel="canonical" href="https://meraky-web.netlify.app/" />
+
+  <!-- Favicons -->
+
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
+  <!-- DNS Prefetch -->
+
+  <link rel="dns-prefetch" href="//fonts.googleapis.com">
+  <link rel="dns-prefetch" href="//fonts.gstatic.com">
+
+  <!-- Preconnect -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Fonts -->
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600&family=Montserrat:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- Hero preload -->
+
+  <link
+      rel="preload"
+      href="/images/hero.webp"
+      as="image"
+      fetchpriority="high"
+  >
+
+  <!-- Logo preload -->
+
+  <link
+      rel="preload"
+      href="/images/logo_salona.webp"
+      as="image"
+  >
+
+  <!-- Open Graph -->
+
+  <meta property="og:type" content="business.business">
+  <meta property="og:locale" content="hr_HR">
+  <meta property="og:site_name" content="Meraky Beauty & Care">
+
+  <meta property="og:title"
+    content="Meraky Beauty & Care | Kozmetički salon Osijek">
+
+  <meta property="og:description"
+    content="Profesionalni tretmani lica, masaže, pedikura, depilacija i njega obrva u Osijeku.">
+
+  <meta property="og:url"
+    content="https://meraky-web.netlify.app/">
+
+  <meta property="og:image"
+    content="https://meraky-web.netlify.app/og-image.jpg">
+
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+
+  <!-- Business -->
+
+  <meta property="business:contact_data:street_address"
+        content="Krbavska ulica 15">
+
+  <meta property="business:contact_data:locality"
+        content="Osijek">
+
+  <meta property="business:contact_data:postal_code"
+        content="31000">
+
+  <meta property="business:contact_data:country_name"
+        content="Hrvatska">
+
+  <meta property="business:contact_data:email"
+        content="merakycare@gmail.com">
+
+  <meta property="business:contact_data:phone_number"
+        content="+385992781199">
+
+  <!-- Twitter -->
+
+  <meta name="twitter:card" content="summary_large_image">
+
+  <meta name="twitter:title"
+        content="Meraky Beauty & Care | Kozmetički salon Osijek">
+
+  <meta name="twitter:description"
+        content="Profesionalni kozmetički salon u Osijeku.">
+
+  <meta name="twitter:image"
+        content="https://meraky-web.netlify.app/og-image.jpg">
+
+  <!-- Structured Data -->
+
+  <script type="application/ld+json">
+{
+"@context":"https://schema.org",
+"@graph":[
+
+{
+"@type":"BeautySalon",
+"@id":"https://meraky-web.netlify.app/#salon",
+
+"name":"Meraky Beauty & Care",
+
+"legalName":"MERAKY, obrt za kozmetičke usluge, vl. Mihaela Gavranović, Osijek, Krbavska ulica 15",
+
+"url":"https://meraky-web.netlify.app/",
+
+"image":"https://meraky-web.netlify.app/og-image.jpg",
+
+"logo":"https://meraky-web.netlify.app/images/logo_salona.webp",
+
+"telephone":"+385992781199",
+
+"email":"merakycare@gmail.com",
+
+"priceRange":"€€",
+
+"currenciesAccepted":"EUR",
+
+"paymentAccepted":[
+"Cash",
+"Credit Card"
+],
+
+"address":{
+"@type":"PostalAddress",
+"streetAddress":"Krbavska ulica 15",
+"addressLocality":"Osijek",
+"postalCode":"31000",
+"addressCountry":"HR"
+},
+
+"geo":{
+"@type":"GeoCoordinates",
+"latitude":45.54997,
+"longitude":18.68137
+},
+
+"founder":{
+"@type":"Person",
+"name":"Mihaela Gavranović"
+},
+
+"openingHoursSpecification":[
+{
+"@type":"OpeningHoursSpecification",
+"dayOfWeek":[
+"Monday",
+"Tuesday",
+"Wednesday",
+"Thursday",
+"Friday"
+],
+"opens":"08:00",
+"closes":"20:00"
+},
+{
+"@type":"OpeningHoursSpecification",
+"dayOfWeek":"Saturday",
+"opens":"08:00",
+"closes":"14:00"
+}
+],
+
+"sameAs":[
+"https://www.instagram.com/merakycare/",
+"https://www.facebook.com/p/Meraky-Beauty-and-Care-100094700135644/"
+]
+},
+
+{
+"@type":"Organization",
+
+"name":"Meraky Beauty & Care",
+
+"url":"https://meraky-web.netlify.app",
+
+"logo":"https://meraky-web.netlify.app/images/logo_salona.webp",
+
+"email":"merakycare@gmail.com",
+
+"telephone":"+385992781199"
+},
+
+{
+"@type":"WebSite",
+
+"url":"https://meraky-web.netlify.app",
+
+"name":"Meraky Beauty & Care",
+
+"inLanguage":"hr",
+
+"publisher":{
+"@id":"https://meraky-web.netlify.app/#salon"
+}
+},
+
+{
+"@type":"Person",
+
+"name":"Mihaela Gavranović",
+
+"jobTitle":"Vlasnica kozmetičkog salona"
+},
+
+{
+"@type":"BreadcrumbList",
+
+"itemListElement":[
+
+{
+"@type":"ListItem",
+"position":1,
+"name":"Početna",
+"item":"https://meraky-web.netlify.app/"
+}
+
+]
+
+}
+
+]
+}
+</script>
+
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="module" src="/src/main.jsx"></script>
+
+</body>
 </html>
