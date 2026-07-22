@@ -196,9 +196,9 @@ export default function App() {
           <p className="text-sm sm:text-base text-brand-espresso/75 mt-2">Svakom tretmanu pristupamo individualno uz vrhunsku kozmetiku i holistički pristup.</p>
         </div>
 
-        {/* Tabovi za kategorije */}
-        <div className="w-full overflow-x-auto pb-4 mb-8 scrollbar-none touch-scroll">
-          <div className="flex gap-3 px-1 md:justify-center min-w-max">
+        {/* Tabovi za kategorije - prilagođeno: na mobitelu scroll, na PC-u wrap */}
+        <div className="w-full pb-4 mb-8 overflow-x-auto md:overflow-visible scrollbar-none touch-scroll">
+          <div className="flex flex-nowrap md:flex-wrap gap-3 px-1 justify-start md:justify-center min-w-max md:min-w-0">
             {servicesData.map((cat, idx) => (
               <button
                 key={idx}
