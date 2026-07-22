@@ -11,6 +11,49 @@ export const servicesData = [
     ]
   },
   {
+    category: "Obrve i trepavice",
+    subtitle: "Precizno oblikovanje i bojanje za uredan i naglašen izgled",
+    icon: "eye",
+    items: [
+      { name: "Oblikovanje obrva", price: 8, duration: "" },
+      { name: "Korekcija obrva", price: 5, duration: "" },
+      { name: "Bojanje obrva", price: 5, duration: "" },
+      { name: "Bojanje trepavica", price: 5, duration: "" }
+    ]
+  },
+  {
+    category: "Depilacija lica",
+    subtitle: "Uklanjanje neželjenih dlačica uz izbor šećerne paste ili voska",
+    icon: "scissors",
+    items: [
+      { name: "Depilacija cijelog lica (šećerna pasta)", price: 10, duration: "" },
+      { name: "Depilacija cijelog lica (vosak)", price: 8, duration: "" },
+      { name: "Depilacija brade (šećerna pasta)", price: 8, duration: "" },
+      { name: "Depilacija nadusnice (šećerna pasta)", price: 7, duration: "" },
+      { name: "Depilacija brade (vosak)", price: 7, duration: "" },
+      { name: "Depilacija nadusnice (vosak)", price: 6, duration: "" }
+    ]
+  },
+  {
+    category: "Depilacija tijela",
+    subtitle: "Tretmani za glatku kožu uz prilagodbu različitim zonama tijela",
+    icon: "flower",
+    items: [
+      { name: "Depilacija cijelih nogu (šećerna pasta)", price: 25, duration: "" },
+      { name: "Depilacija cijelih nogu (vosak)", price: 18, duration: "" },
+      { name: "Depilacija leđa (vosak / pasta)", price: "8 / 15", duration: "" },
+      { name: "Depilacija potkoljenica (vosak / pasta)", price: "9 / 13", duration: "" },
+      { name: "Depilacija natkoljenica (vosak / pasta)", price: "9 / 13", duration: "" },
+      { name: "Depilacija ruku Ž (vosak / pasta)", price: "9 / 11", duration: "" },
+      { name: "Depilacija stražnjice (vosak / pasta)", price: "8 / 10", duration: "" },
+      { name: "Depilacija brazilska (šećerna pasta)", price: 13, duration: "" },
+      { name: "Depilacija bikini zone (šećerna pasta)", price: 8, duration: "" },
+      { name: "Depilacija trbuha (šećerna pasta)", price: 8, duration: "" },
+      { name: "Depilacija pazuha (šećerna pasta)", price: 8, duration: "" },
+      { name: "Depilacija djelomične bikini zone (pasta)", price: 7, duration: "" }
+    ]
+  },
+  {
     category: "Holističke masaže i terapije",
     subtitle: "Resetiraj um i oslobodi tijelo napetosti uz pomno birane tehinke dodira",
     icon: "massage",
