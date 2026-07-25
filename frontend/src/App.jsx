@@ -43,7 +43,7 @@ function ServiceIcon({ type }) {
 }
 
 export default function App() {
-  const [view, setView] = useState(window.location.hash === '#admin' ? 'admin' : 'site');
+  const [view, setView] = useState(window.location.pathname === '/admin' ? 'admin' : 'site');
   const [servicesData, setServicesData] = useState([]);
   const [loadingServices, setLoadingServices] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -92,13 +92,13 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    const onHashChange = () => {
-      setView(window.location.hash === '#admin' ? 'admin' : 'site');
-    };
+  const handleLocationChange = () => {
+    setView(window.location.pathname === '/admin' ? 'admin' : 'site');
+  };
 
-    window.addEventListener('hashchange', onHashChange);
-    return () => window.removeEventListener('hashchange', onHashChange);
-  }, []);
+  window.addEventListener('popstate', handleLocationChange);
+  return () => window.removeEventListener('popstate', handleLocationChange);
+}, []);
 
   const handleQuickBook = (category, itemName) => {
     setPreselectedCategory(category);
@@ -110,9 +110,9 @@ export default function App() {
     return (
       <AdminPanel
         onBackToSite={() => {
-          window.location.hash = '';
-          setView('site');
-          fetchServices();
+          window.history.pushState({}, '', '/');
+setView('site');
+fetchServices();
         }}
       />
     );
@@ -445,15 +445,6 @@ export default function App() {
 
         <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16 pt-8 border-t border-white/10 text-center text-xs text-brand-cream/50">
           <p>© {new Date().getFullYear()} Meraky Beauty & Care. Sva prava pridržana.</p>
-          <button
-            onClick={() => {
-              window.location.hash = 'admin';
-              setView('admin');
-            }}
-            className="mt-4 text-[10px] text-brand-cream/30 hover:text-brand-cream uppercase tracking-widest transition-colors"
-          >
-            Admin prijava
-          </button>
         </div>
       </footer>
     </div>
