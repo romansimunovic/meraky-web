@@ -1,0 +1,27 @@
+# Ovisnosti (Dependencies)
+/node_modules
+
+# Tajne i konfiguracijske datoteke (Sigurnost!)
+.env
+.env.*
+!.env.example
+
+# Lokalna SQLite baza podataka (Ne ide na GitHub)
+*.db
+*.db-journal
+dev.db
+dev.db-journal
+
+# Registri i zapisnici (Logs)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Datoteke sustava (OS files)
+.DS_Store
+Thumbs.db
+
+# Izlazne mape za build
+/dist
+/build

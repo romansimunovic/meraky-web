@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 
 const MAX_NOTE_LENGTH = 300;
 const SALON_LOCATION = "Krbavska ulica 15, Osijek";
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const nameRegex = /^[A-Za-zČĆŽŠĐčćžšđ\s'-]{2,50}$/;
 const phoneRegex = /^(\+385|0)\d{8,9}$/;
@@ -176,7 +177,7 @@ function Field({
       </label>
       <input
         type={type}
-        required
+        required={type !== "email"}
         placeholder={placeholder}
         className={`w-full text-base p-3 rounded-xl border bg-[#FCFAF7] focus:outline-none text-[#2B231F] transition-all ${
           touched
@@ -211,6 +212,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
     () =>
       servicesData.flatMap((cat) =>
         (cat.items || []).map((item) => ({
+          id: item.id,
           name: item.name,
           category: cat.category,
           price: item.price,
@@ -226,6 +228,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
         .map((cat) => ({
           category: cat.category,
           items: (cat.items || []).map((item) => ({
+            id: item.id,
             name: item.name,
             category: cat.category,
             price: item.price,
@@ -256,9 +259,9 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
 
   const isNameValid = nameRegex.test(clientData.name.trim());
   const isPhoneValid = phoneRegex.test(clientData.phone.replace(/\s+/g, ""));
-  const isEmailValid = emailRegex.test(clientData.email.trim());
+  const isEmailValid = clientData.email.trim() === "" || emailRegex.test(clientData.email.trim());
   const isNoteValid = clientData.note.length <= MAX_NOTE_LENGTH;
-  const isFormValid = isNameValid && isPhoneValid && isEmailValid && isNoteValid;
+  const isFormValid = isNameValid && isPhoneValid && isEmailValid && isNoteValid && !!selectedService && !!selectedDate && !!selectedTime;
 
   const handleServiceSelect = (service) => {
     setSelectedService(service);
@@ -270,14 +273,44 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
     setStep(3);
   };
 
-  const handleSubmitBooking = (e) => {
+  const handleSubmitBooking = async (e) => {
     e.preventDefault();
-    if (!isFormValid) return;
+    if (!isFormValid || !selectedService?.id) return;
+
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
+
+    try {
+      const localDateTime = new Date(`${selectedDate}T${selectedTime}:00`);
+      const dateTimeIso = localDateTime.toISOString();
+
+      const response = await fetch(`${API_URL}/api/bookings`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          serviceId: selectedService.id,
+          dateTime: dateTimeIso,
+          fullName: clientData.name.trim(),
+          phone: clientData.phone.trim(),
+          email: clientData.email.trim() || null,
+          notes: clientData.note.trim() || null,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Došlo je do greške pri spremanju rezervacije.');
+      }
+
       setStep(4);
-    }, 1500);
+    } catch (error) {
+      console.error('Greška pri slanju rezervacije:', error);
+      alert(error.message || 'Nije moguće poslati rezervaciju. Provjerite radi li backend.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const { googleUrl, outlookUrl, icalUrl } = getCalendarUrls(
@@ -365,13 +398,12 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                       </div>
 
                       <div className="grid gap-2.5 sm:gap-3 sm:grid-cols-2">
-                        {group.items.map((service, index) => (
+                        {group.items.map((service) => (
                           <ServiceCard
-                            key={`${service.name}-${index}`}
+                            key={service.id}
                             service={service}
                             selected={
-                              selectedService?.name === service.name &&
-                              selectedService?.category === service.category
+                              selectedService?.id === service.id
                             }
                             onClick={handleServiceSelect}
                           />
@@ -462,8 +494,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                       )}
                     </div>
                   </div>
-                  </div>
-      
+                </div>
               </div>
             )}
 
@@ -519,7 +550,7 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </div>
 
                   <Field
-                    label="E-mail adresa (za potvrdu)"
+                    label="E-mail adresa (opcionalno)"
                     type="email"
                     placeholder="marija@gmail.com"
                     value={clientData.email}
@@ -617,12 +648,14 @@ export default function BookingSystem({ servicesData = [], initialCategory, init
                   </div>
                 </div>
 
-                <div className="bg-amber-50/50 border border-amber-200/50 rounded-xl p-3 max-w-md mx-auto text-center text-xs text-amber-800">
-                  <p className="leading-relaxed">
-                    Na e-mail <strong>{clientData.email}</strong> smo poslali potvrdu rezervacije.
-                    <span className="block mt-1 font-semibold">Ako ne vidite poruku, provjerite Spam ili Promocije.</span>
-                  </p>
-                </div>
+                {clientData.email && (
+                  <div className="bg-amber-50/50 border border-amber-200/50 rounded-xl p-3 max-w-md mx-auto text-center text-xs text-amber-800">
+                    <p className="leading-relaxed">
+                      Na e-mail <strong>{clientData.email}</strong> smo poslali potvrdu rezervacije.
+                      <span className="block mt-1 font-semibold">Ako ne vidite poruku, provjerite Spam ili Promocije.</span>
+                    </p>
+                  </div>
+                )}
 
                 <div className="max-w-md mx-auto pt-2 space-y-2">
                   <p className="text-[9px] uppercase tracking-widest text-[#2B231F]/60 font-bold">
