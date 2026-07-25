@@ -35,12 +35,18 @@ router.post('/', async (req, res) => {
       });
     }
 
-    const googleEventId = await createCalendarEvent({
-      summary: `${service.name} - ${fullName}`,
-      description: `Klijentica: ${fullName}\nTelefon: ${phone}\nE-mail: ${email || 'Nema'}\nNapomena: ${notes || 'Nema'}`,
-      startTime: dateTime,
-      durationMin: service.durationMin,
-    });
+    let googleEventId = null;
+
+    try {
+      googleEventId = await createCalendarEvent({
+        summary: `${service.name} - ${fullName}`,
+        description: `Klijentica: ${fullName}\nTelefon: ${phone}\nE-mail: ${email || 'Nema'}\nNapomena: ${notes || 'Nema'}`,
+        startTime: dateTime,
+        durationMin: service.durationMin,
+      });
+    } catch (calendarError) {
+      console.error('Google Calendar nije dostupan:', calendarError.message);
+    }
 
     const booking = await prisma.booking.create({
       data: {
